@@ -1,0 +1,44 @@
+{
+  "name": "jsonml-stringify",
+  "version": "0.1.0",
+  "description": "Convert jsonml arrays to html strings",
+  "keywords": [],
+  "author": "Raynos <raynos2@gmail.com>",
+  "repository": "git://github.com/Raynos/jsonml-stringify.git",
+  "main": "index",
+  "homepage": "https://github.com/Raynos/jsonml-stringify",
+  "contributors": [{
+    "name": "Raynos"
+  }],
+  "bugs": {
+    "url": "https://github.com/Raynos/jsonml-stringify/issues",
+    "email": "raynos2@gmail.com"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "~1.0.2"
+  },
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://github.com/Raynos/jsonml-stringify/raw/master/LICENSE"
+  }],
+  "scripts": {
+    "test": "node ./test/index.js"
+  },
+  "testling": {
+    "files": "test/index.js",
+    "browsers": [
+      "ie/8..latest",
+      "firefox/16..latest",
+      "firefox/nightly",
+      "chrome/22..latest",
+      "chrome/canary",
+      "opera/12..latest",
+      "opera/next",
+      "safari/5.1..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest",
+      "android-browser/4.2..latest"
+    ]
+  }
+}
