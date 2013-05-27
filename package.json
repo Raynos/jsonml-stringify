@@ -16,7 +16,10 @@
     "url": "https://github.com/Raynos/jsonml-stringify/issues",
     "email": "raynos2@gmail.com"
   },
-  "dependencies": {},
+  "dependencies": {
+    "global": "~2.0.3",
+    "data-set": "~0.2.2"
+  },
   "devDependencies": {
     "tape": "~1.0.2"
   },

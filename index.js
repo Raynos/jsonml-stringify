@@ -1,6 +1,5 @@
 var normalize = require("./normalize")
-
-var splitSelectorRegex = /([\.#]?[a-zA-Z0-9_-]+)/
+var unpackSelector = require("./unpack-selector")
 
 module.exports = stringify
 
@@ -49,29 +48,7 @@ function stringify(jsonml, indentation) {
     return strings.join("")
 }
 
-function unpackSelector(selector, attributes) {
-    var selectorMatches = selector.split(splitSelectorRegex)
-    var tagName = "div"
 
-    selectorMatches.forEach(function (match) {
-        var value = match.substring(1, match.length)
-
-        if (match[0] === ".") {
-            attributes.class = attributes.class || ""
-            attributes.class += value + " "
-        } else if (match[0] === "#") {
-            attributes.id = value
-        } else if (match.length > 0) {
-            tagName = match
-        }
-    })
-
-    if (attributes.class) {
-        attributes.class = attributes.class.trim()
-    }
-
-    return tagName
-}
 
 function attrs(attributes) {
     var strings = Object.keys(attributes).map(function (key) {
