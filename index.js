@@ -33,8 +33,9 @@ function stringify(jsonml, opts) {
     if (typeof jsonml === "string") {
         var needsEscaping = !(parentTagName in avoidEscaping)
 
-        return indentation +
-            (needsEscaping ? escapeHTMLTextContent(jsonml) : jsonml)
+        return indentation + (needsEscaping ?
+                escapeHTMLTextContent(jsonml, parentTagName) :
+                jsonml)
     }
 
     var strings = []

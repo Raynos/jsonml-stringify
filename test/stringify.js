@@ -135,3 +135,14 @@ test("attributes are properly escaped", function (assert) {
 
     assert.end()
 })
+
+test("script tags in script tags get encoded properly", function (assert) {
+    var html = stringify(["script", "var foo = \"bar </script>\""])
+
+    assert.equal(html,
+        "<script>\n" +
+        "    var foo = \"bar <\/script>\"\n" +
+        "</script>")
+
+    assert.end()
+})
