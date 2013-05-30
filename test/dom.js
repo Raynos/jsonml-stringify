@@ -15,11 +15,11 @@ test("dom properly converts jsonml to element", function (assert) {
     ]])
 
     assert.ok(elem)
-    assert.equal(elem.tagName, "html")
+    assert.equal(elem.tagName, "HTML")
     assert.equal(elem.childNodes.length, 2)
 
-    assert.equal(elem.childNodes[0].tagName, "head")
-    assert.equal(elem.childNodes[1].tagName, "body")
+    assert.equal(elem.childNodes[0].tagName, "HEAD")
+    assert.equal(elem.childNodes[1].tagName, "BODY")
 
     var body = elem.childNodes[1]
 

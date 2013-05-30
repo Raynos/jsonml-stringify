@@ -33,7 +33,7 @@ function dom(jsonml) {
 
     var tagName = unpackSelector(selector, attributes)
 
-    var elem = document.createElement(tagName)
+    var elem = document.createElement(tagName.toUpperCase())
     Object.keys(attributes).forEach(function (k) {
         if (k === "class") {
             elem.className = attributes[k]
