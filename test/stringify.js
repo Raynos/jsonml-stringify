@@ -141,7 +141,7 @@ test("script tags in script tags get encoded properly", function (assert) {
 
     assert.equal(html,
         "<script>\n" +
-        "    var foo = \"bar <\/script>\"\n" +
+        "    var foo = \"bar <\\\/script>\"\n" +
         "</script>")
 
     assert.end()

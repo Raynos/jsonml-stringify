@@ -3,11 +3,6 @@ var unpackSelector = require("./unpack-selector")
 var attrs = require("./attrs")
 var escapeHTMLTextContent = require("./escape-text-content")
 
-var avoidEscaping = {
-    "script": true,
-    "style": true
-}
-
 module.exports = stringify
 
 /*
@@ -31,11 +26,7 @@ function stringify(jsonml, opts) {
     var parentTagName = opts.parentTagName || "<div>"
 
     if (typeof jsonml === "string") {
-        var needsEscaping = !(parentTagName in avoidEscaping)
-
-        return indentation + (needsEscaping ?
-                escapeHTMLTextContent(jsonml, parentTagName) :
-                jsonml)
+        return indentation + escapeHTMLTextContent(jsonml, parentTagName)
     }
 
     var strings = []
