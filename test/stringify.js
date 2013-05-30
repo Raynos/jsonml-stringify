@@ -42,6 +42,13 @@ test("encodes string as text content", function (assert) {
     assert.end()
 })
 
+test("encodes scripts properly as text content", function (assert) {
+    var html = stringify("<script>alert('no u')</script>")
+
+    assert.equal(html, "&lt;script&gt;alert('no u')&lt;/script&gt;")
+    assert.end()
+})
+
 test("unpacks selector into class & id", function (assert) {
     var html = stringify(["span.foo#baz.bar"])
 

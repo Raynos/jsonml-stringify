@@ -1,5 +1,8 @@
+var escapeHTML = require("escape-html")
+
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
+var attrs = require("./attrs")
 
 module.exports = stringify
 
@@ -22,7 +25,7 @@ function stringify(jsonml, indentation) {
     indentation = indentation || ""
 
     if (typeof jsonml === "string") {
-        return indentation + jsonml
+        return indentation + escapeHTML(jsonml)
     }
 
     var strings = []
@@ -46,33 +49,4 @@ function stringify(jsonml, indentation) {
     }
 
     return strings.join("")
-}
-
-
-
-function attrs(attributes) {
-    var strings = Object.keys(attributes).map(function (key) {
-        var value = attributes[key]
-
-        if (key === "style") {
-            value = stylify(value)
-        }
-
-        if (value === true) {
-            return key
-        }
-
-        return key + "=\"" + value + "\""
-    })
-
-    return strings.length ? " " + strings.join(" ") : ""
-}
-
-function stylify(styles) {
-    var attr = ""
-    Object.keys(styles).forEach(function (key) {
-        var value = styles[key]
-        attr += key + ":" + value + ";"
-    })
-    return attr
 }
