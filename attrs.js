@@ -1,3 +1,5 @@
+var escapeHTMLAttributes = require("./escape-attributes")
+
 module.exports = attrs
 
 function attrs(attributes) {
@@ -12,7 +14,7 @@ function attrs(attributes) {
             return key
         }
 
-        return key + "=\"" + value + "\""
+        return key + "=\"" + escapeHTMLAttributes(value) + "\""
     })
 
     return strings.length ? " " + strings.join(" ") : ""

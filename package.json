@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "global": "~2.0.3",
-    "data-set": "~0.2.2",
-    "escape-html": "0.0.1"
+    "data-set": "~0.2.2"
   },
   "devDependencies": {
     "tape": "~1.0.2"

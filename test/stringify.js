@@ -112,3 +112,26 @@ test("integration test", function (assert) {
         "</html>")
     assert.end()
 })
+
+test("script tag with javascript is not html encoded", function (assert) {
+    var html = stringify(["script", {
+        type: "text/javascript"
+    }, "var foo = \"bar\""])
+
+    assert.equal(html,
+        "<script type=\"text/javascript\">\n" +
+        "    var foo = \"bar\"\n" +
+        "</script>")
+
+    assert.end()
+})
+
+test("attributes are properly escaped", function (assert) {
+    var html = stringify(["div", {
+        "data-marker": "\"foo\""
+    }])
+
+    assert.equal(html, "<div data-marker=\"&quot;foo&quot;\"></div>")
+
+    assert.end()
+})

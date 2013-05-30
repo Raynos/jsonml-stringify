@@ -1,8 +1,12 @@
-var escapeHTML = require("escape-html")
-
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
 var attrs = require("./attrs")
+var escapeHTMLTextContent = require("./escape-text-content")
+
+var avoidEscaping = {
+    "script": true,
+    "style": true
+}
 
 module.exports = stringify
 
@@ -18,14 +22,19 @@ module.exports = stringify
         Array<JsonML>
     ]
 
-    stringify := (jsonml: JsonML, indentation?: String) => String
+    stringify := (jsonml: JsonML, opts?: Object) => String
 */
-function stringify(jsonml, indentation) {
+function stringify(jsonml, opts) {
     jsonml = normalize(jsonml)
-    indentation = indentation || ""
+    opts = opts || {}
+    var indentation = opts.indentation || ""
+    var parentTagName = opts.parentTagName || "<div>"
 
     if (typeof jsonml === "string") {
-        return indentation + escapeHTML(jsonml)
+        var needsEscaping = !(parentTagName in avoidEscaping)
+
+        return indentation +
+            (needsEscaping ? escapeHTMLTextContent(jsonml) : jsonml)
     }
 
     var strings = []
@@ -40,7 +49,10 @@ function stringify(jsonml, indentation) {
         strings.push("\n")
 
         children.forEach(function (jsonml) {
-            strings.push(stringify(jsonml, indentation + "    ") + "\n")
+            strings.push(stringify(jsonml, {
+                indentation: indentation + "    ",
+                parentTagName: tagName
+            }) + "\n")
         })
 
         strings.push(indentation + "</" + tagName + ">")
