@@ -92,7 +92,7 @@ test("integration test", function (assert) {
             ["title", "Process dashboard"],
             ["link", { rel: "stylesheet", href: "/less/main"}]
         ]],
-        ["body", { class: "main" }, [
+        ["body", { "class": "main" }, [
             ["script", { src: "/browserify/main" }]
         ]]
     ]])
