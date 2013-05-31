@@ -1,8 +1,10 @@
-var isAttribute = /"/g
+var isDoubleQuote = /"/g
+var isSingleQuote = /'/g
 
 module.exports = escapeHTMLAttributes
 
 function escapeHTMLAttributes(s) {
     return String(s)
-        .replace(isAttribute, "&quot;")
+        .replace(isDoubleQuote, "&quot;")
+        .replace(isSingleQuote, "&#39;")
 }
