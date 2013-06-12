@@ -45,7 +45,7 @@ test("encodes string as text content", function (assert) {
 test("encodes scripts properly as text content", function (assert) {
     var html = stringify("<script>alert('no u')</script>")
 
-    assert.equal(html, "&lt;script&gt;alert('no u')&lt;/script&gt;")
+    assert.equal(html, "&lt;script&gt;alert(&apos;no u&apos;)&lt;/script&gt;")
     assert.end()
 })
 
@@ -143,6 +143,16 @@ test("script tags in script tags get encoded properly", function (assert) {
         "<script>\n" +
         "    var foo = \"bar <\\\/script>\"\n" +
         "</script>")
+
+    assert.end()
+})
+
+test("allow raw data", function (assert) {
+    var html = stringify(["span", [{
+        raw: "&nbsp;&nbsp;&nbsp;|"
+    }]])
+
+    assert.equal(html, "<span>\n    \u00A0\u00A0\u00A0|\n</span>")
 
     assert.end()
 })

@@ -19,38 +19,45 @@ module.exports = normalize
 
     type MaybeJsonML :=
         String |
+        { raw: String } |
         [String] |
+        [String, { raw: String }] |
         [String, Object] |
         [String, String] |
         [String, Array<MaybeJsonML>] |
         [String, Object, Array<MaybeJsonML>] |
-        [String, Object, String]
+        [String, Object, String] |
+        [String, Object, { raw: String }]
 
     normalize := (MaybeJsonML) => JsonML
 */
 function normalize(jsonml) {
-    if (typeof jsonml === "string") {
+    if (isSingleChild(jsonml)) {
         return jsonml
     }
 
-    var selector = jsonml[0]
-    var hashOrChildren = jsonml[1]
-    var hash
-    var children
+    var hash = jsonml[1]
+    var children = jsonml[2]
 
-    if (isArray(hashOrChildren) || typeof hashOrChildren === "string") {
-        children = hashOrChildren
-    } else if (typeof hashOrChildren === "object") {
-        hash = hashOrChildren
+    if (!children && isChildren(hash)) {
+        children = hash
+        hash = {}
     }
 
-    if (jsonml[2]) {
-        children = jsonml[2]
-    }
-
-    if (typeof children === "string") {
+    if (isSingleChild(children)) {
         children = [children]
     }
 
-    return [selector, hash || {}, children || []]
+    return [ jsonml[0], hash || {}, children || [] ]
+}
+
+function isSingleChild(maybeChild) {
+    return typeof maybeChild === "string" ||
+        !!maybeChild && typeof maybeChild.raw === "string"
+}
+
+function isChildren(maybeChildren) {
+    return isArray(maybeChildren) ||
+        typeof maybeChildren === "string" ||
+        !!maybeChildren && typeof maybeChildren.raw === "string"
 }

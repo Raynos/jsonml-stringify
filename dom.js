@@ -1,5 +1,6 @@
 var document = require("global/document")
 var DataSet = require("data-set")
+var decode = require("ent").decode
 
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
@@ -9,10 +10,13 @@ module.exports = dom
 /*
     type JsonMLSelector := String
     type JsonMLTextContent := String
+    type JsonMLRawContent := {
+        raw: String
+    }
     type JsonMLAttributeKey := String
     type JsonMLAttributeValue := String | Number | Boolean
 
-    type JsonML := JsonMLTextContent | [
+    type JsonML := JsonMLTextContent | JsonMLRawContent | [
         JsonMLSelector,
         Object<JsonMLAttributeKey, JsonMLAttributeValue>,
         Array<JsonML>
@@ -25,6 +29,8 @@ function dom(jsonml) {
 
     if (typeof jsonml === "string") {
         return document.createTextNode(jsonml)
+    } else if (!!jsonml && typeof jsonml.raw === "string") {
+        return document.createTextNode(decode(jsonml.raw))
     }
 
     var selector = jsonml[0]

@@ -1,3 +1,5 @@
+var decode = require("ent").decode
+
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
 var attrs = require("./attrs")
@@ -8,10 +10,13 @@ module.exports = stringify
 /*
     type JsonMLSelector := String
     type JsonMLTextContent := String
+    type JsonMLRawContent := {
+        raw: String
+    }
     type JsonMLAttributeKey := String
     type JsonMLAttributeValue := String | Number | Boolean
 
-    type JsonML := JsonMLTextContent | [
+    type JsonML := JsonMLTextContent | JsonMLRawContent | [
         JsonMLSelector,
         Object<JsonMLAttributeKey, JsonMLAttributeValue>,
         Array<JsonML>
@@ -27,6 +32,8 @@ function stringify(jsonml, opts) {
 
     if (typeof jsonml === "string") {
         return indentation + escapeHTMLTextContent(jsonml, parentTagName)
+    } else if (!!jsonml && typeof jsonml.raw === "string") {
+        return indentation + decode(jsonml.raw)
     }
 
     var strings = []

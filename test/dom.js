@@ -27,3 +27,13 @@ test("dom properly converts jsonml to element", function (assert) {
 
     assert.end()
 })
+
+test("allow raw data", function (assert) {
+    var elem = dom(["span", [{
+        raw: "&nbsp;&nbsp;&nbsp;|"
+    }]])
+
+    assert.equal(elem.childNodes[0].data, "\u00A0\u00A0\u00A0|")
+
+    assert.end()
+})
