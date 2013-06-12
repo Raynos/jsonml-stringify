@@ -38,6 +38,69 @@ assert.equal(html,
     "</html>")
 ```
 
+## stringify raw html entities
+
+```js
+var stringify = require("jsonml-stringify")
+var assert = require("assert")
+
+var html = stringify(["div", { raw: "foo&copy;" }])
+
+assert.equal(html, "<div>\n    foo©\n</div>")
+```
+
+## strict JSONML definition
+
+```js
+type JsonMLSelector := String
+type JsonMLTextContent := String
+type JsonMLRawContent := {
+    raw: String
+}
+type JsonMLAttributeKey := String
+type JsonMLAttributeValue := String | Number | Boolean
+
+type JsonML := JsonMLTextContent | JsonMLRawContent | [
+    JsonMLSelector,
+    Object<JsonMLAttributeKey, JsonMLAttributeValue>,
+    Array<JsonML>
+]
+
+stringify := (jsonml: JsonML, opts?: Object) => String
+```
+
+## Loose JSONML definition
+
+JsonML for our use case is very loosely defined. This
+    enables expressiveness in using it for templates.
+
+Valid things are:
+ - a text content string
+ - a triplet containing just the selector
+ - a triplet containing a selector and hash of attributes
+ - a triplet containing a selector and a text content string
+ - a triplet containing a selector and an array of children
+ - a triplet containing a selector, attributes hash
+    and an array of children
+ - a triplet containing a selector, attributes hash
+    and a text content string
+
+```js
+type MaybeJsonML :=
+    String |
+    { raw: String } |
+    [String] |
+    [String, { raw: String }] |
+    [String, Object] |
+    [String, String] |
+    [String, Array<MaybeJsonML>] |
+    [String, Object, Array<MaybeJsonML>] |
+    [String, Object, String] |
+    [String, Object, { raw: String }]
+
+normalize := (MaybeJsonML) => JsonML
+```
+
 ## Installation
 
 `npm install jsonml-stringify`
