@@ -20,6 +20,7 @@ module.exports = normalize
     type MaybeJsonML :=
         String |
         { raw: String } |
+        { fragment: Array<MaybeJsonML> }
         [String] |
         [String, { raw: String }] |
         [String, Object] |
