@@ -31,6 +31,12 @@ function dom(jsonml) {
         return document.createTextNode(jsonml)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return document.createTextNode(decode(jsonml.raw))
+    } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
+        var frag = document.createDocumentFragment()
+        jsonml.fragment.forEach(function (child) {
+            frag.appendChild(dom(child))
+        })
+        return frag
     }
 
     var selector = jsonml[0]

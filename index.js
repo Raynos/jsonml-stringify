@@ -13,14 +13,21 @@ module.exports = stringify
     type JsonMLRawContent := {
         raw: String
     }
+    type JsonMLFragment := {
+        fragment: Array<JsonML>
+    }
     type JsonMLAttributeKey := String
     type JsonMLAttributeValue := String | Number | Boolean
 
-    type JsonML := JsonMLTextContent | JsonMLRawContent | [
-        JsonMLSelector,
-        Object<JsonMLAttributeKey, JsonMLAttributeValue>,
-        Array<JsonML>
-    ]
+    type JsonML :=
+        JsonMLTextContent |
+        JsonMLFragment |
+        JsonMLRawContent |
+        [
+            JsonMLSelector,
+            Object<JsonMLAttributeKey, JsonMLAttributeValue>,
+            Array<JsonML>
+        ]
 
     stringify := (jsonml: JsonML, opts?: Object) => String
 */
@@ -29,14 +36,18 @@ function stringify(jsonml, opts) {
     opts = opts || {}
     var indentation = opts.indentation || ""
     var parentTagName = opts.parentTagName || "<div>"
+    var strings = []
 
     if (typeof jsonml === "string") {
         return indentation + escapeHTMLTextContent(jsonml, parentTagName)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return indentation + decode(jsonml.raw)
+    } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
+        renderChildren(jsonml.fragment, "")
+        return strings.join("")
     }
 
-    var strings = []
+
     var selector = jsonml[0]
     var attributes = jsonml[1]
     var children = jsonml[2]
@@ -47,12 +58,7 @@ function stringify(jsonml, opts) {
     if (children.length > 0) {
         strings.push("\n")
 
-        children.forEach(function (jsonml) {
-            strings.push(stringify(jsonml, {
-                indentation: indentation + "    ",
-                parentTagName: tagName
-            }) + "\n")
-        })
+        renderChildren(children, "    ")
 
         strings.push(indentation + "</" + tagName + ">")
     } else {
@@ -60,4 +66,13 @@ function stringify(jsonml, opts) {
     }
 
     return strings.join("")
+
+    function renderChildren(children, extraIndent) {
+        children.forEach(function (jsonml) {
+            strings.push(stringify(jsonml, {
+                indentation: indentation + extraIndent,
+                parentTagName: tagName
+            }) + "\n")
+        })
+    }
 }
