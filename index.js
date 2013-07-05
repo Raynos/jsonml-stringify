@@ -51,6 +51,7 @@ function stringify(jsonml, opts) {
     var selector = jsonml[0]
     var attributes = jsonml[1]
     var children = jsonml[2]
+
     var tagName = unpackSelector(selector, attributes)
 
     strings.push(indentation + "<" + tagName + attrs(attributes) + ">")

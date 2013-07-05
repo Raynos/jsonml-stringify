@@ -85,6 +85,13 @@ test("can set value-less attributes", function (assert) {
     assert.end()
 })
 
+test("can handle boolean attributes", function (assert) {
+    var html = stringify(["option", { selected: false }])
+
+    assert.equal(html, "<option></option>")
+    assert.end()
+})
+
 test("integration test", function (assert) {
     var html = stringify(["html", [
         ["head", [

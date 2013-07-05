@@ -3,7 +3,7 @@ var escapeHTMLAttributes = require("./escape-attributes")
 module.exports = attrs
 
 function attrs(attributes) {
-    var strings = Object.keys(attributes).map(function (key) {
+    var attrString = Object.keys(attributes).map(function (key) {
         var value = attributes[key]
 
         if (key === "style") {
@@ -12,12 +12,14 @@ function attrs(attributes) {
 
         if (value === true) {
             return key
+        } else if (value === false) {
+            return ""
         }
 
         return key + "=\"" + escapeHTMLAttributes(value) + "\""
-    })
+    }).join(" ")
 
-    return strings.length ? " " + strings.join(" ") : ""
+    return attrString === "" ? "" : " " + attrString
 }
 
 function stylify(styles) {
