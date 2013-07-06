@@ -1,4 +1,5 @@
 var test = require("tape")
+var document = require("global/document")
 
 var dom = require("../dom")
 
@@ -34,6 +35,21 @@ test("allow raw data", function (assert) {
     }]])
 
     assert.equal(elem.childNodes[0].data, "\u00A0\u00A0\u00A0|")
+
+    assert.end()
+})
+
+test("allow raw html", function (assert) {
+    if (!document.defaultView) {
+        return assert.end()
+    }
+
+    var elem = dom(["div", [{
+        raw: "<p>Foo</p>"
+    }]])
+
+    assert.equal(elem.childNodes[0].tagName, "P")
+    assert.equal(elem.childNodes[0].childNodes[0].data, "Foo")
 
     assert.end()
 })

@@ -17,7 +17,7 @@
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
-    "global": "~2.0.3",
+    "global": "~2.0.7",
     "data-set": "~0.2.2",
     "ent": "0.0.5"
   },

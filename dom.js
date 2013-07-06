@@ -30,7 +30,11 @@ function dom(jsonml) {
     if (typeof jsonml === "string") {
         return document.createTextNode(jsonml)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
-        return document.createTextNode(decode(jsonml.raw))
+        var raw = decode(jsonml.raw)
+        var wrapper = document.createElement("div")
+        wrapper.innerHTML = raw
+        return wrapper.childNodes[0] ? wrapper.childNodes[0] :
+            document.createTextNode(raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
         var frag = document.createDocumentFragment()
         jsonml.fragment.forEach(function (child) {
