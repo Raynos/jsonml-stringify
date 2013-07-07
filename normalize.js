@@ -1,3 +1,5 @@
+var util = require("util")
+
 var isArray = Array.isArray
 
 module.exports = normalize
@@ -42,13 +44,14 @@ module.exports = normalize
 
     normalize := (MaybeJsonML) => JsonML
 */
-function normalize(jsonml) {
-    if (isSingleChild(jsonml)) {
-        return jsonml
+function normalize(maybeJsonML) {
+    if (isSingleChild(maybeJsonML)) {
+        return maybeJsonML
     }
 
-    var hash = jsonml[1]
-    var children = jsonml[2]
+    var selector = maybeJsonML[0]
+    var hash = maybeJsonML[1]
+    var children = maybeJsonML[2]
 
     if (!children && isChildren(hash)) {
         children = hash
@@ -59,7 +62,14 @@ function normalize(jsonml) {
         children = [children]
     }
 
-    return [ jsonml[0], hash || {}, children || [] ]
+    var jsonml = [selector, hash || {}, children || []]
+
+    if (typeof selector !== "string") {
+        throw new Error("Invalid JSONML data structure " +
+            util.inspect(jsonml, { colors: true }))
+    }
+
+    return jsonml
 }
 
 function isSingleChild(maybeChild) {
