@@ -25,7 +25,7 @@ function stringify(jsonml, opts) {
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return indentation + decode(jsonml.raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
-        renderChildren(jsonml.fragment, "")
+        renderChildren(jsonml.fragment, "", true)
         return strings.join("")
     }
 
@@ -39,7 +39,7 @@ function stringify(jsonml, opts) {
     strings.push(indentation + "<" + tagName + attrs(attributes) + ">")
 
     if (children.length > 0) {
-        var useWhitespace = whitespaceSensitive.indexOf(tagName) !== -1
+        var useWhitespace = whitespaceSensitive.indexOf(tagName) === -1
 
         if (useWhitespace) {
             strings.push("\n")
@@ -64,7 +64,7 @@ function stringify(jsonml, opts) {
             strings.push(stringify(jsonml, {
                 indentation: indentation + extraIndent,
                 parentTagName: tagName
-            }) + useWhitespace ? "\n" : "")
+            }) + (useWhitespace ? "\n" : ""))
         })
     }
 }
