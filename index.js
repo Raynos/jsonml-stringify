@@ -4,6 +4,7 @@ var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
 var attrs = require("./attrs")
 var escapeHTMLTextContent = require("./escape-text-content")
+var whitespaceSensitive = ["pre", "textarea"]
 
 module.exports = stringify
 
@@ -13,8 +14,8 @@ module.exports = stringify
     stringify := (jsonml: JsonML, opts?: Object) => String
 */
 function stringify(jsonml, opts) {
-    jsonml = normalize(jsonml)
     opts = opts || {}
+    jsonml = normalize(jsonml)
     var indentation = opts.indentation || ""
     var parentTagName = opts.parentTagName || "<div>"
     var strings = []
@@ -38,11 +39,20 @@ function stringify(jsonml, opts) {
     strings.push(indentation + "<" + tagName + attrs(attributes) + ">")
 
     if (children.length > 0) {
-        strings.push("\n")
+        var isSensitive = whitespaceSensitive.indexOf(tagName) !== -1
+
+        if (!isSensitive) {
+            strings.push("\n")
+        }
 
         renderChildren(children, "    ")
 
-        strings.push(indentation + "</" + tagName + ">")
+        if (!isSensitive) {
+            strings.push(indentation + "</" + tagName + ">")
+        } else {
+            strings.push("</" + tagName + ">")
+        }
+
     } else {
         strings.push("</" + tagName + ">")
     }
