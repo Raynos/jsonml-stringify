@@ -62,7 +62,7 @@ function stringify(jsonml, opts) {
     function renderChildren(children, extraIndent, useWhitespace) {
         children.forEach(function (jsonml) {
             strings.push(stringify(jsonml, {
-                indentation: indentation + extraIndent,
+                indentation: useWhitespace ? indentation + extraIndent : "",
                 parentTagName: tagName
             }) + (useWhitespace ? "\n" : ""))
         })
