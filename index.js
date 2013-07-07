@@ -39,15 +39,15 @@ function stringify(jsonml, opts) {
     strings.push(indentation + "<" + tagName + attrs(attributes) + ">")
 
     if (children.length > 0) {
-        var isSensitive = whitespaceSensitive.indexOf(tagName) !== -1
+        var useWhitespace = whitespaceSensitive.indexOf(tagName) !== -1
 
-        if (!isSensitive) {
+        if (useWhitespace) {
             strings.push("\n")
         }
 
-        renderChildren(children, "    ")
+        renderChildren(children, "    ", useWhitespace)
 
-        if (!isSensitive) {
+        if (useWhitespace) {
             strings.push(indentation + "</" + tagName + ">")
         } else {
             strings.push("</" + tagName + ">")
@@ -59,12 +59,12 @@ function stringify(jsonml, opts) {
 
     return strings.join("")
 
-    function renderChildren(children, extraIndent) {
+    function renderChildren(children, extraIndent, useWhitespace) {
         children.forEach(function (jsonml) {
             strings.push(stringify(jsonml, {
                 indentation: indentation + extraIndent,
                 parentTagName: tagName
-            }) + "\n")
+            }) + useWhitespace ? "\n" : "")
         })
     }
 }
