@@ -136,3 +136,11 @@ test("[String, Object, { raw: String }] is valid", function (assert) {
 
     assert.end()
 })
+
+test("[[String, Object]] throws an exception", function (assert) {
+    assert.throws(function () {
+        stringify([["div", {}]])
+    }, /Invalid JSONML/)
+
+    assert.end()
+})

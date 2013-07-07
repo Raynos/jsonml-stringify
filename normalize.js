@@ -66,7 +66,7 @@ function normalize(maybeJsonML) {
 
     if (typeof selector !== "string") {
         throw new Error("Invalid JSONML data structure " +
-            util.inspect(jsonml, { colors: true }))
+            util.inspect(jsonml))
     }
 
     return jsonml
