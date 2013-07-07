@@ -8,7 +8,7 @@ var escapeHTMLTextContent = require("./escape-text-content")
 module.exports = stringify
 
 /*
-    @require ./types
+    @require ./jsonml.types
 
     stringify := (jsonml: JsonML, opts?: Object) => String
 */

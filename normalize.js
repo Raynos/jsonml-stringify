@@ -5,7 +5,7 @@ var isArray = Array.isArray
 module.exports = normalize
 
 /*
-    @require ./types
+    @require ./jsonml.types
 
     normalize := (MaybeJsonML) => JsonML
 */

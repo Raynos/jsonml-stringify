@@ -8,7 +8,7 @@ var unpackSelector = require("./unpack-selector")
 module.exports = dom
 
 /*
-    @require ./types
+    @require ./jsonml.types
 
     dom := (jsonml: JsonML) => DOMElement
 */
