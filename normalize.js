@@ -1,54 +1,22 @@
+var util = require("util")
+
 var isArray = Array.isArray
 
 module.exports = normalize
 
 /*
-    JsonML for our use case is very loosely defined. This
-        enables expressiveness in using it for templates.
-
-    Valid things are:
-     - a text content string
-     - a raw object containing a raw HTML string
-     - a fragment object containing a list of children
-     - a triplet containing just the selector
-     - a triplet containing a selector and a raw object
-     - a triplet containing a selector and a fragment object
-     - a triplet containing a selector and hash of attributes
-     - a triplet containing a selector and a text content string
-     - a triplet containing a selector and an array of children
-     - a triplet containing a selector, attributes hash
-        and an array of children
-     - a triplet containing a selector, attributes hash
-        and a text content string
-     - a triplet containing a selector, attributes hash
-        and a fragment object
-     - a triplet containing a selector, attributes hash
-        and a raw object
-
-    type MaybeJsonML :=
-        String |
-        { raw: String } |
-        { fragment: Array<MaybeJsonML> } |
-        [String] |
-        [String, { raw: String }] |
-        [String, { fragment: Array<MaybeJsonML> }] |
-        [String, Object] |
-        [String, String] |
-        [String, Array<MaybeJsonML>] |
-        [String, Object, Array<MaybeJsonML>] |
-        [String, Object, String] |
-        [String, Object, { fragment: Array<MaybeJsonML> }] |
-        [String, Object, { raw: String }]
+    @require ./jsonml.types
 
     normalize := (MaybeJsonML) => JsonML
 */
-function normalize(jsonml) {
-    if (isSingleChild(jsonml)) {
-        return jsonml
+function normalize(maybeJsonML) {
+    if (isSingleChild(maybeJsonML)) {
+        return maybeJsonML
     }
 
-    var hash = jsonml[1]
-    var children = jsonml[2]
+    var selector = maybeJsonML[0]
+    var hash = maybeJsonML[1]
+    var children = maybeJsonML[2]
 
     if (!children && isChildren(hash)) {
         children = hash
@@ -59,7 +27,14 @@ function normalize(jsonml) {
         children = [children]
     }
 
-    return [ jsonml[0], hash || {}, children || [] ]
+    var jsonml = [selector, hash || {}, children || []]
+
+    if (typeof selector !== "string") {
+        throw new Error("Invalid JSONML data structure " +
+            util.inspect(jsonml))
+    }
+
+    return jsonml
 }
 
 function isSingleChild(maybeChild) {

@@ -8,19 +8,7 @@ var unpackSelector = require("./unpack-selector")
 module.exports = dom
 
 /*
-    type JsonMLSelector := String
-    type JsonMLTextContent := String
-    type JsonMLRawContent := {
-        raw: String
-    }
-    type JsonMLAttributeKey := String
-    type JsonMLAttributeValue := String | Number | Boolean
-
-    type JsonML := JsonMLTextContent | JsonMLRawContent | [
-        JsonMLSelector,
-        Object<JsonMLAttributeKey, JsonMLAttributeValue>,
-        Array<JsonML>
-    ]
+    @require ./jsonml.types
 
     dom := (jsonml: JsonML) => DOMElement
 */

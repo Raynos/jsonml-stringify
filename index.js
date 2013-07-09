@@ -4,36 +4,18 @@ var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
 var attrs = require("./attrs")
 var escapeHTMLTextContent = require("./escape-text-content")
+var whitespaceSensitive = ["pre", "textarea"]
 
 module.exports = stringify
 
 /*
-    type JsonMLSelector := String
-    type JsonMLTextContent := String
-    type JsonMLRawContent := {
-        raw: String
-    }
-    type JsonMLFragment := {
-        fragment: Array<JsonML>
-    }
-    type JsonMLAttributeKey := String
-    type JsonMLAttributeValue := String | Number | Boolean
-
-    type JsonML :=
-        JsonMLTextContent |
-        JsonMLFragment |
-        JsonMLRawContent |
-        [
-            JsonMLSelector,
-            Object<JsonMLAttributeKey, JsonMLAttributeValue>,
-            Array<JsonML>
-        ]
+    @require ./jsonml.types
 
     stringify := (jsonml: JsonML, opts?: Object) => String
 */
 function stringify(jsonml, opts) {
-    jsonml = normalize(jsonml)
     opts = opts || {}
+    jsonml = normalize(jsonml)
     var indentation = opts.indentation || ""
     var parentTagName = opts.parentTagName || "<div>"
     var strings = []
@@ -43,7 +25,7 @@ function stringify(jsonml, opts) {
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return indentation + decode(jsonml.raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
-        renderChildren(jsonml.fragment, "")
+        renderChildren(jsonml.fragment, "", true)
         return strings.join("")
     }
 
@@ -57,23 +39,32 @@ function stringify(jsonml, opts) {
     strings.push(indentation + "<" + tagName + attrs(attributes) + ">")
 
     if (children.length > 0) {
-        strings.push("\n")
+        var useWhitespace = whitespaceSensitive.indexOf(tagName) === -1
 
-        renderChildren(children, "    ")
+        if (useWhitespace) {
+            strings.push("\n")
+        }
 
-        strings.push(indentation + "</" + tagName + ">")
+        renderChildren(children, "    ", useWhitespace)
+
+        if (useWhitespace) {
+            strings.push(indentation + "</" + tagName + ">")
+        } else {
+            strings.push("</" + tagName + ">")
+        }
+
     } else {
         strings.push("</" + tagName + ">")
     }
 
     return strings.join("")
 
-    function renderChildren(children, extraIndent) {
+    function renderChildren(children, extraIndent, useWhitespace) {
         children.forEach(function (jsonml) {
             strings.push(stringify(jsonml, {
-                indentation: indentation + extraIndent,
+                indentation: useWhitespace ? indentation + extraIndent : "",
                 parentTagName: tagName
-            }) + "\n")
+            }) + (useWhitespace ? "\n" : ""))
         })
     }
 }
