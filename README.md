@@ -76,33 +76,6 @@ assert.equal(html, "<div>\n" +
     "</div>")
 ```
 
-## strict JSONML definition
-
-```ocaml
-type JsonMLSelector := String
-type JsonMLTextContent := String
-type JsonMLRawContent := {
-    raw: String
-}
-type JsonMLFragment := {
-    fragment: Array<JsonML>
-}
-type JsonMLAttributeKey := String
-type JsonMLAttributeValue := String | Number | Boolean
-
-type JsonML :=
-    JsonMLTextContent |
-    JsonMLFragment |
-    JsonMLRawContent |
-    [
-        JsonMLSelector,
-        Object<JsonMLAttributeKey, JsonMLAttributeValue>,
-        Array<JsonML>
-    ]
-
-stringify := (jsonml: JsonML, opts?: Object) => String
-```
-
 ## Loose JSONML definition
 
 JsonML for our use case is very loosely defined. This
@@ -128,22 +101,57 @@ Valid things are:
     and a raw object
 
 ```ocaml
-type MaybeJsonML :=
-    String |
-    { raw: String } |
-    { fragment: Array<MaybeJsonML> } |
-    [String] |
-    [String, { raw: String }] |
-    [String, { fragment: Array<MaybeJsonML> }] |
-    [String, Object] |
-    [String, String] |
-    [String, Array<MaybeJsonML>] |
-    [String, Object, Array<MaybeJsonML>] |
-    [String, Object, String] |
-    [String, Object, { fragment: Array<MaybeJsonML> }] |
-    [String, Object, { raw: String }]
+type JsonMLSelector := String
+type JsonMLTextContent := String
+type JsonMLRawContent := {
+    raw: String
+}
+type JsonMLFragment := {
+    fragment: Array<JsonML>
+}
+type JsonMLAttributeKey := String
+type JsonMLAttributeValue := String | Number | Boolean
+type JsonMLAttrs := Object<JsonMLAttributeKey, JsonMLAttributeValue>
 
-normalize := (MaybeJsonML) => JsonML
+type MaybeJsonML :=
+    JsonMLTextContent |
+    JsonMLRawContent |
+    { fragment: Array<MaybeJsonML> } |
+    [JsonMLSelector] |
+    [JsonMLSelector, JsonMLRawContent] |
+    [JsonMLSelector, { fragment: Array<MaybeJsonML> }] |
+    [JsonMLSelector, Object] |
+    [JsonMLSelector, JsonMLTextContent] |
+    [JsonMLSelector, Array<MaybeJsonML>] |
+    [JsonMLSelector, JsonMLAttrs, Array<MaybeJsonML>] |
+    [JsonMLSelector, JsonMLAttrs, JsonMLTextContent] |
+    [JsonMLSelector, JsonMLAttrs, { fragment: Array<MaybeJsonML> }] |
+    [JsonMLSelector, JsonMLAttrs, JsonMLRawContent]
+```
+
+### Strict definition & functions
+
+```ocaml
+type JsonML :=
+    JsonMLTextContent |
+    JsonMLFragment |
+    JsonMLRawContent |
+    [
+        JsonMLSelector,
+        JsonMLAttrs,
+        Array<JsonML>
+    ]
+
+jsonml-stringify := (jsonml: JsonML, opts: Object?) => String
+
+jsonml-stringify/normalize := (MaybeJsonML) => JsonML
+
+jsonml-stringify/dom := (jsonml: JsonML) => DOMElement
+
+jsonml-stringify/attrs := (attributes: Object) => String
+
+jsonml-stringify/unpack-selector :=
+    (selector: String, attributes!: Object) => tagName: String
 ```
 
 ## Installation
