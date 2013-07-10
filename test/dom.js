@@ -53,3 +53,21 @@ test("allow raw html", function (assert) {
 
     assert.end()
 })
+
+
+test("allow raw multi html", function (assert) {
+    if (!document.defaultView) {
+        return assert.end()
+    }
+
+    var elem = dom(["div", [{
+        raw: "<p>Foo</p><p>Bar</p>"
+    }]])
+
+    assert.equal(elem.childNodes[0].tagName, "P")
+    assert.equal(elem.childNodes[0].childNodes[0].data, "Foo")
+    assert.equal(elem.childNodes[1].tagName, "P")
+    assert.equal(elem.childNodes[1].childNodes[0].data, "Bar")
+
+    assert.end()
+})

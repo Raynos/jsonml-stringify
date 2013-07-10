@@ -1,6 +1,6 @@
 var document = require("global/document")
 var DataSet = require("data-set")
-var decode = require("ent").decode
+var element = require("element")
 
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
@@ -18,11 +18,7 @@ function dom(jsonml) {
     if (typeof jsonml === "string") {
         return document.createTextNode(jsonml)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
-        var raw = decode(jsonml.raw)
-        var wrapper = document.createElement("div")
-        wrapper.innerHTML = raw
-        return wrapper.childNodes[0] ? wrapper.childNodes[0] :
-            document.createTextNode(raw)
+        return element(jsonml.raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
         var frag = document.createDocumentFragment()
         jsonml.fragment.forEach(function (child) {
