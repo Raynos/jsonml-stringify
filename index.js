@@ -22,9 +22,9 @@ function stringify(jsonml, opts) {
     var strings = []
 
     if (typeof jsonml === "string") {
-        return indentation + escapeHTMLTextContent(jsonml, parentTagName)
+        return escapeHTMLTextContent(jsonml, parentTagName)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
-        return indentation + decode(jsonml.raw)
+        return decode(jsonml.raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
         renderChildren(jsonml.fragment, "", true)
         return strings.join("")
@@ -40,13 +40,15 @@ function stringify(jsonml, opts) {
     strings.push(indentation + "<" + tagName + attrs(attributes) + ">")
 
     if (children.length > 0) {
-        var useWhitespace = whitespaceSensitive.indexOf(tagName) === -1
+        var firstChild = normalize(children[0])
+        var useWhitespace = whitespaceSensitive.indexOf(tagName) === -1 &&
+            typeof firstChild !== "string" && typeof firstChild.raw !== "string"
 
         if (useWhitespace) {
             strings.push("\n")
         }
 
-        renderChildren(children, "    ", useWhitespace)
+        renderChildren(children, "    ", useWhitespace, useWhitespace)
 
         if (useWhitespace) {
             strings.push(indentation + "</" + tagName + ">")
@@ -60,17 +62,21 @@ function stringify(jsonml, opts) {
 
     return strings.join("")
 
-    function renderChildren(children, extraIndent, useWhitespace) {
+    function renderChildren(children, indent, whitespace, newLine) {
         children.forEach(function (childML) {
             if (childML === null || childML === undefined) {
                 throw new Error("Invalid JSONML data structure " +
                     util.inspect(jsonml))
             }
 
-            strings.push(stringify(childML, {
-                indentation: useWhitespace ? indentation + extraIndent : "",
+            var text = stringify(childML, {
+                indentation: whitespace ? indentation + indent : "",
                 parentTagName: tagName
-            }) + (useWhitespace ? "\n" : ""))
+            })
+
+            newLine = newLine && text !== ""
+
+            strings.push(text + (newLine ? "\n" : ""))
         })
     }
 }

@@ -24,14 +24,14 @@ test("encodes attributes", function (assert) {
 test("encodes text content", function (assert) {
     var html = stringify(["title", "Process dashboard"])
 
-    assert.equal(html, "<title>\n    Process dashboard\n</title>")
+    assert.equal(html, "<title>Process dashboard</title>")
     assert.end()
 })
 
 test("encodes text content as children", function (assert) {
     var html = stringify(["title", ["Process dashboard"]])
 
-    assert.equal(html, "<title>\n    Process dashboard\n</title>")
+    assert.equal(html, "<title>Process dashboard</title>")
     assert.end()
 })
 
@@ -71,9 +71,7 @@ test("encodes children", function (assert) {
 
     assert.equal(html, "<head>\n" +
         "    <meta charset=\"utf-8\"></meta>\n" +
-        "    <title>\n" +
-        "        Process dashboard\n" +
-        "    </title>\n" +
+        "    <title>Process dashboard</title>\n" +
         "</head>")
     assert.end()
 })
@@ -108,9 +106,7 @@ test("integration test", function (assert) {
         "<html>\n" +
         "    <head>\n" +
         "        <meta charset=\"utf-8\"></meta>\n" +
-        "        <title>\n" +
-        "            Process dashboard\n" +
-        "        </title>\n" +
+        "        <title>Process dashboard</title>\n" +
         "        <link rel=\"stylesheet\" href=\"/less/main\"></link>\n" +
         "    </head>\n" +
         "    <body class=\"main\">\n" +
@@ -126,9 +122,7 @@ test("script tag with javascript is not html encoded", function (assert) {
     }, "var foo = \"bar\""])
 
     assert.equal(html,
-        "<script type=\"text/javascript\">\n" +
-        "    var foo = \"bar\"\n" +
-        "</script>")
+        "<script type=\"text/javascript\">var foo = \"bar\"</script>")
 
     assert.end()
 })
@@ -147,9 +141,7 @@ test("script tags in script tags get encoded properly", function (assert) {
     var html = stringify(["script", "var foo = \"bar </script>\""])
 
     assert.equal(html,
-        "<script>\n" +
-        "    var foo = \"bar <\\\/script>\"\n" +
-        "</script>")
+        "<script>var foo = \"bar <\\\/script>\"</script>")
 
     assert.end()
 })
@@ -159,7 +151,7 @@ test("allow raw data", function (assert) {
         raw: "&nbsp;&nbsp;&nbsp;|"
     }]])
 
-    assert.equal(html, "<span>\n    \u00A0\u00A0\u00A0|\n</span>")
+    assert.equal(html, "<span>\u00A0\u00A0\u00A0|</span>")
 
     assert.end()
 })
