@@ -1,4 +1,5 @@
 var decode = require("ent").decode
+var util = require("util")
 
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
@@ -60,8 +61,13 @@ function stringify(jsonml, opts) {
     return strings.join("")
 
     function renderChildren(children, extraIndent, useWhitespace) {
-        children.forEach(function (jsonml) {
-            strings.push(stringify(jsonml, {
+        children.forEach(function (childML) {
+            if (childML === null || childML === undefined) {
+                throw new Error("Invalid JSONML data structure " +
+                    util.inspect(jsonml))
+            }
+
+            strings.push(stringify(childML, {
                 indentation: useWhitespace ? indentation + extraIndent : "",
                 parentTagName: tagName
             }) + (useWhitespace ? "\n" : ""))
