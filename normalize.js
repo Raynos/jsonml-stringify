@@ -11,6 +11,10 @@ module.exports = normalize
 */
 function normalize(maybeJsonML) {
     if (isSingleChild(maybeJsonML)) {
+        if (maybeJsonML.fragment) {
+            maybeJsonML.fragment = maybeJsonML.fragment.filter(purgeEmpty)
+        }
+
         return maybeJsonML
     }
 
@@ -27,7 +31,9 @@ function normalize(maybeJsonML) {
         children = [children]
     }
 
-    var jsonml = [selector, hash || {}, children || []]
+    children = (children || []).filter(purgeEmpty)
+
+    var jsonml = [selector, hash || {}, children]
 
     if (typeof selector !== "string") {
         throw new Error("Invalid JSONML data structure " +
@@ -35,6 +41,10 @@ function normalize(maybeJsonML) {
     }
 
     return jsonml
+}
+
+function purgeEmpty(child) {
+    return child !== null && child !== undefined
 }
 
 function isSingleChild(maybeChild) {

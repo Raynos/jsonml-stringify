@@ -34,19 +34,24 @@ type JsonMLAttributeKey := String
 type JsonMLAttributeValue := String | Number | Boolean
 type JsonMLAttrs := Object<JsonMLAttributeKey, JsonMLAttributeValue>
 
+type MaybeJsonMLChild :=
+    null |
+    undefined |
+    MaybeJsonML
+
 type MaybeJsonML :=
     JsonMLTextContent |
     JsonMLRawContent |
-    { fragment: Array<MaybeJsonML> } |
+    { fragment: Array<MaybeJsonMLChild> } |
     [JsonMLSelector] |
     [JsonMLSelector, JsonMLRawContent] |
-    [JsonMLSelector, { fragment: Array<MaybeJsonML> }] |
+    [JsonMLSelector, { fragment: Array<MaybeJsonMLChild> }] |
     [JsonMLSelector, Object] |
     [JsonMLSelector, JsonMLTextContent] |
-    [JsonMLSelector, Array<MaybeJsonML>] |
-    [JsonMLSelector, JsonMLAttrs, Array<MaybeJsonML>] |
+    [JsonMLSelector, Array<MaybeJsonMLChild>] |
+    [JsonMLSelector, JsonMLAttrs, Array<MaybeJsonMLChild>] |
     [JsonMLSelector, JsonMLAttrs, JsonMLTextContent] |
-    [JsonMLSelector, JsonMLAttrs, { fragment: Array<MaybeJsonML> }] |
+    [JsonMLSelector, JsonMLAttrs, { fragment: Array<MaybeJsonMLChild> }] |
     [JsonMLSelector, JsonMLAttrs, JsonMLRawContent]
 
 type JsonML :=

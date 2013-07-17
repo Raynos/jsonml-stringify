@@ -5,6 +5,8 @@ var stringify = require("../index")
 var children = [
     "foo",
     { raw: "foo&copy;" },
+    null,
+    undefined,
     ["span"],
     ["span", { raw: "foo&copy;"} ],
     ["span", "foo"],
