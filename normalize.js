@@ -32,12 +32,17 @@ function normalize(maybeJsonML) {
     }
 
     children = (children || []).filter(purgeEmpty)
+    hash = hash || {}
 
-    var jsonml = [selector, hash || {}, children]
+    var jsonml = [selector, hash, children]
 
     if (typeof selector !== "string") {
         throw new Error("Invalid JSONML data structure " +
-            util.inspect(jsonml))
+            util.inspect(jsonml) + " Selector is not a string")
+    }
+    if (typeof hash !== "object" || hash === null) {
+        throw new Error("Invalid JSONML data structure " +
+            util.inspect(jsonml) + " Properties is not an object")
     }
 
     return jsonml

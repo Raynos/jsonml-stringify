@@ -136,7 +136,15 @@ test("[String, Object, { raw: String }] is valid", function (assert) {
 test("[[String, Object]] throws an exception", function (assert) {
     assert.throws(function () {
         stringify([["div", {}]])
-    }, /Invalid JSONML/)
+    }, /Selector is not a string/)
+
+    assert.end()
+})
+
+test("[String, String, Array] throws an exception", function (assert) {
+    assert.throws(function () {
+        stringify(["div", "some text", ["some more text"]])
+    }, /Properties is not an object/)
 
     assert.end()
 })
