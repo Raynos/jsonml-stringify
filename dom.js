@@ -41,7 +41,7 @@ function dom(jsonml) {
             var style = attributes.style
 
             Object.keys(style).forEach(function (key) {
-                elem.style.setProperty(key, style[key])
+                elem.style[key] = style[key]
             })
         } else if (k.substr(0, 5) === "data-") {
             DataSet(elem)[k.substr(5)] = attributes[k]

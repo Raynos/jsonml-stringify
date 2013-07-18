@@ -71,3 +71,13 @@ test("allow raw multi html", function (assert) {
 
     assert.end()
 })
+
+test("style properties", function (assert) {
+    var elem = dom(["div", {
+        style: { borderColor: "black" }
+    }])
+
+    assert.equal(elem.style.borderColor, "black")
+
+    assert.end()
+})

@@ -155,3 +155,13 @@ test("allow raw data", function (assert) {
 
     assert.end()
 })
+
+test("style properties", function (assert) {
+    var html = stringify(["div", {
+        style: { borderColor: "black" }
+    }])
+
+    assert.equal(html, "<div style=\"border-color: black;\"></div>")
+
+    assert.end()
+})

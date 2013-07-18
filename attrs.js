@@ -1,4 +1,5 @@
 var escapeHTMLAttributes = require("./escape-attributes")
+var camelCase = /([a-z][A-Z])/g
 
 module.exports = attrs
 
@@ -26,7 +27,13 @@ function stylify(styles) {
     var attr = ""
     Object.keys(styles).forEach(function (key) {
         var value = styles[key]
-        attr += key + ":" + value + ";"
+        attr += hyphenate(key) + ": " + value + ";"
     })
     return attr
+}
+
+function hyphenate(key) {
+    return key.replace(camelCase, function (group) {
+        return group[0] + "-" + group[1].toLowerCase()
+    })
 }
