@@ -9,16 +9,16 @@ Valid things are:
  - a triplet containing just the selector
  - a triplet containing a selector and a raw object
  - a triplet containing a selector and a fragment object
- - a triplet containing a selector and hash of attributes
+ - a triplet containing a selector and hash of properties
  - a triplet containing a selector and a text content string
  - a triplet containing a selector and an array of children
- - a triplet containing a selector, attributes hash
+ - a triplet containing a selector, properties hash
     and an array of children
- - a triplet containing a selector, attributes hash
+ - a triplet containing a selector, properties hash
     and a text content string
- - a triplet containing a selector, attributes hash
+ - a triplet containing a selector, properties hash
     and a fragment object
- - a triplet containing a selector, attributes hash
+ - a triplet containing a selector, properties hash
     and a raw object
 *)
 
@@ -30,9 +30,9 @@ type JsonMLRawContent := {
 type JsonMLFragment := {
     fragment: Array<JsonML>
 }
-type JsonMLAttributeKey := String
-type JsonMLAttributeValue := String | Number | Boolean
-type JsonMLAttrs := Object<JsonMLAttributeKey, JsonMLAttributeValue>
+type JsonMLPropertyKey := String
+type JsonMlPropertyValue := String | Number | Boolean
+type JsonMLProps := Object<JsonMLPropertyKey, JsonMlPropertyValue>
 
 type MaybeJsonMLChild :=
     null |
@@ -49,10 +49,10 @@ type MaybeJsonML :=
     [JsonMLSelector, Object] |
     [JsonMLSelector, JsonMLTextContent] |
     [JsonMLSelector, Array<MaybeJsonMLChild>] |
-    [JsonMLSelector, JsonMLAttrs, Array<MaybeJsonMLChild>] |
-    [JsonMLSelector, JsonMLAttrs, JsonMLTextContent] |
-    [JsonMLSelector, JsonMLAttrs, { fragment: Array<MaybeJsonMLChild> }] |
-    [JsonMLSelector, JsonMLAttrs, JsonMLRawContent]
+    [JsonMLSelector, JsonMLProps, Array<MaybeJsonMLChild>] |
+    [JsonMLSelector, JsonMLProps, JsonMLTextContent] |
+    [JsonMLSelector, JsonMLProps, { fragment: Array<MaybeJsonMLChild> }] |
+    [JsonMLSelector, JsonMLProps, JsonMLRawContent]
 
 type JsonML :=
     JsonMLTextContent |
@@ -60,6 +60,6 @@ type JsonML :=
     JsonMLRawContent |
     [
         JsonMLSelector,
-        JsonMLAttrs,
+        JsonMLProps,
         Array<JsonML>
     ]

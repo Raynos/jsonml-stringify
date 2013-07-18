@@ -5,7 +5,7 @@ var dom = require("../dom")
 
 test("dom properly converts jsonml to element", function (assert) {
     var elem = dom(["html", [
-        ["head", [
+        ["head", { className: "head" }, [
             ["meta", { charset: "utf-8" }],
             ["title", "Process dashboard"],
             ["link", { rel: "stylesheet", href: "/less/main"}]
@@ -20,11 +20,9 @@ test("dom properly converts jsonml to element", function (assert) {
     assert.equal(elem.childNodes.length, 2)
 
     assert.equal(elem.childNodes[0].tagName, "HEAD")
+    assert.equal(elem.childNodes[0].className, "head")
     assert.equal(elem.childNodes[1].tagName, "BODY")
-
-    var body = elem.childNodes[1]
-
-    assert.equal(body.className, "main")
+    assert.equal(elem.childNodes[1].className, "main")
 
     assert.end()
 })

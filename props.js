@@ -1,14 +1,16 @@
 var escapeHTMLAttributes = require("./escape-attributes")
 var camelCase = /([a-z][A-Z])/g
 
-module.exports = attrs
+module.exports = props
 
-function attrs(attributes) {
-    var attrString = Object.keys(attributes).map(function (key) {
-        var value = attributes[key]
+function props(properties) {
+    var attrString = Object.keys(properties).map(function (key) {
+        var value = properties[key]
 
         if (key === "style") {
             value = stylify(value)
+        } else if (key === "className") {
+            key = "class"
         }
 
         if (value === true) {

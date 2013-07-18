@@ -28,25 +28,25 @@ function dom(jsonml) {
     }
 
     var selector = jsonml[0]
-    var attributes = jsonml[1]
+    var properties = jsonml[1]
     var children = jsonml[2]
 
-    var tagName = unpackSelector(selector, attributes)
+    var tagName = unpackSelector(selector, properties)
 
     var elem = document.createElement(tagName.toUpperCase())
-    Object.keys(attributes).forEach(function (k) {
+    Object.keys(properties).forEach(function (k) {
         if (k === "class") {
-            elem.className = attributes[k]
+            elem.className = properties[k]
         } else if (k === "style") {
-            var style = attributes.style
+            var style = properties.style
 
             Object.keys(style).forEach(function (key) {
                 elem.style[key] = style[key]
             })
         } else if (k.substr(0, 5) === "data-") {
-            DataSet(elem)[k.substr(5)] = attributes[k]
+            DataSet(elem)[k.substr(5)] = properties[k]
         } else {
-            elem[k] = attributes[k]
+            elem[k] = properties[k]
         }
     })
 

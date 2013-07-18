@@ -3,7 +3,7 @@ var util = require("util")
 
 var normalize = require("./normalize")
 var unpackSelector = require("./unpack-selector")
-var attrs = require("./attrs")
+var props = require("./props")
 var escapeHTMLTextContent = require("./escape-text-content")
 var whitespaceSensitive = ["pre", "textarea"]
 
@@ -32,12 +32,12 @@ function stringify(jsonml, opts) {
 
 
     var selector = jsonml[0]
-    var attributes = jsonml[1]
+    var properties = jsonml[1]
     var children = jsonml[2]
 
-    var tagName = unpackSelector(selector, attributes)
+    var tagName = unpackSelector(selector, properties)
 
-    strings.push(indentation + "<" + tagName + attrs(attributes) + ">")
+    strings.push(indentation + "<" + tagName + props(properties) + ">")
 
     if (children.length > 0) {
         var firstChild = normalize(children[0])
