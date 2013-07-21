@@ -20,7 +20,7 @@ function props(properties) {
         }
 
         return key + "=\"" + escapeHTMLAttributes(value) + "\""
-    }).join(" ")
+    }).join(" ").trim()
 
     return attrString === "" ? "" : " " + attrString
 }

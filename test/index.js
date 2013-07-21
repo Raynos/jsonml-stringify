@@ -1,3 +1,4 @@
-require("./stringify")
-require("./dom")
-require("./normalize")
+require("./stringify.js")
+require("./dom.js")
+require("./normalize.js")
+require("./integration/timezone-dropdown.js")

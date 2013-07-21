@@ -20,13 +20,18 @@ function stringify(jsonml, opts) {
     var indentation = opts.indentation || ""
     var parentTagName = opts.parentTagName || "<div>"
     var strings = []
+    var firstChild, useWhitespace
 
     if (typeof jsonml === "string") {
         return escapeHTMLTextContent(jsonml, parentTagName)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return decode(jsonml.raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
-        renderChildren(jsonml.fragment, "", true)
+        firstChild = normalize(jsonml.fragment[0])
+        useWhitespace = whitespaceSensitive.indexOf(tagName) === -1 &&
+            typeof firstChild !== "string" && typeof firstChild.raw !== "string"
+
+        renderChildren(jsonml.fragment, "", true, useWhitespace)
         return strings.join("")
     }
 
@@ -40,8 +45,8 @@ function stringify(jsonml, opts) {
     strings.push(indentation + "<" + tagName + props(properties) + ">")
 
     if (children.length > 0) {
-        var firstChild = normalize(children[0])
-        var useWhitespace = whitespaceSensitive.indexOf(tagName) === -1 &&
+        firstChild = normalize(children[0])
+        useWhitespace = whitespaceSensitive.indexOf(tagName) === -1 &&
             typeof firstChild !== "string" && typeof firstChild.raw !== "string"
 
         if (useWhitespace) {
@@ -74,7 +79,8 @@ function stringify(jsonml, opts) {
                 parentTagName: tagName
             })
 
-            newLine = newLine && text !== ""
+            newLine = newLine && text !== "" &&
+                (!(childML.fragment && text.slice(-1) === "\n"))
 
             strings.push(text + (newLine ? "\n" : ""))
         })
