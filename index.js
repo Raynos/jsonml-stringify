@@ -27,6 +27,10 @@ function stringify(jsonml, opts) {
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return decode(jsonml.raw)
     } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
+        if (jsonml.fragment.length === 0) {
+            return ""
+        }
+
         firstChild = normalize(jsonml.fragment[0])
         useWhitespace = whitespaceSensitive.indexOf(tagName) === -1 &&
             typeof firstChild !== "string" && typeof firstChild.raw !== "string"
