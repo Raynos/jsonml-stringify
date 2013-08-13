@@ -18,6 +18,11 @@ function normalize(maybeJsonML) {
         return maybeJsonML
     }
 
+    if (Array.isArray(maybeJsonML) && maybeJsonML.length === 0) {
+        throw new Error("Invalid JSONML data structure " +
+            util.inspect(maybeJsonML) + " Empty array is not a valid element")
+    }
+
     var selector = maybeJsonML[0]
     var hash = maybeJsonML[1]
     var children = maybeJsonML[2]

@@ -148,3 +148,11 @@ test("[String, String, Array] throws an exception", function (assert) {
 
     assert.end()
 })
+
+test("[] throws an exception", function (assert) {
+    assert.throws(function () {
+        stringify([])
+    }, /Empty array is not a valid element/)
+
+    assert.end()
+})
