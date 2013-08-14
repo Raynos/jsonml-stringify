@@ -1,8 +1,6 @@
 # jsonml-stringify
 
-[![build status][1]][2] [![dependency status][3]][4] [![coverage report][9]][10]
-
-[![stability index][15]][16]
+[![build status][1]][2] [![dependency status][3]][4] [![coverage report][9]][10] [![stability index][15]][16]
 
 [![npm stats][13]][14]
 
@@ -174,24 +172,14 @@ jsonml-stringify/unpack-selector :=
   [4]: https://david-dm.org/Raynos/jsonml-stringify
   [5]: https://ci.testling.com/Raynos/jsonml-stringify.png
   [6]: https://ci.testling.com/Raynos/jsonml-stringify
-
-  [7]: https://badge.fury.io/js/jsonml-stringify.png
-  [8]: https://badge.fury.io/js/jsonml-stringify
   [9]: https://coveralls.io/repos/Raynos/jsonml-stringify/badge.png
   [10]: https://coveralls.io/r/Raynos/jsonml-stringify
-  [11]: https://gemnasium.com/Raynos/jsonml-stringify.png
-  [12]: https://gemnasium.com/Raynos/jsonml-stringify
   [13]: https://nodei.co/npm/jsonml-stringify.png?downloads=true&stars=true
   [14]: https://nodei.co/npm/jsonml-stringify
   [15]: http://hughsk.github.io/stability-badges/dist/unstable.svg
   [16]: http://github.com/hughsk/stability-badges
 
-<!--
-    [![build status][1]][2]
-    [![NPM version][3]][4]
-    [![Coverage Status][5]][6]
-    [![gemnasium Dependency Status][7]][8]
-    [![Davis Dependency status][9]][10]
--->
-
-<!-- [![browser support][11]][12] -->
+  [7]: https://badge.fury.io/js/jsonml-stringify.png
+  [8]: https://badge.fury.io/js/jsonml-stringify
+  [11]: https://gemnasium.com/Raynos/jsonml-stringify.png
+  [12]: https://gemnasium.com/Raynos/jsonml-stringify
