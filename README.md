@@ -175,14 +175,14 @@ jsonml-stringify/unpack-selector :=
   [5]: https://ci.testling.com/Raynos/jsonml-stringify.png
   [6]: https://ci.testling.com/Raynos/jsonml-stringify
 
-  [7]: https://badge.fury.io/js/{{project}}.png
-  [8]: https://badge.fury.io/js/{{project}}
-  [9]: https://coveralls.io/repos/{{name}}/{{project}}/badge.png
-  [10]: https://coveralls.io/r/{{name}}/{{project}}
-  [11]: https://gemnasium.com/{{name}}/{{project}}.png
-  [12]: https://gemnasium.com/{{name}}/{{project}}
-  [13]: https://nodei.co/npm/{{project}}.png?downloads=true&stars=true
-  [14]: https://nodei.co/npm/{{project}}
+  [7]: https://badge.fury.io/js/jsonml-stringify.png
+  [8]: https://badge.fury.io/js/jsonml-stringify
+  [9]: https://coveralls.io/repos/Raynos/jsonml-stringify/badge.png
+  [10]: https://coveralls.io/r/Raynos/jsonml-stringify
+  [11]: https://gemnasium.com/Raynos/jsonml-stringify.png
+  [12]: https://gemnasium.com/Raynos/jsonml-stringify
+  [13]: https://nodei.co/npm/jsonml-stringify.png?downloads=true&stars=true
+  [14]: https://nodei.co/npm/jsonml-stringify
   [15]: http://hughsk.github.io/stability-badges/dist/unstable.svg
   [16]: http://github.com/hughsk/stability-badges
 
