@@ -10,6 +10,10 @@ module.exports = normalize
     normalize := (MaybeJsonML) => JsonML
 */
 function normalize(maybeJsonML) {
+    if (maybeJsonML === null || maybeJsonML === undefined) {
+        return null
+    }
+
     if (isSingleChild(maybeJsonML)) {
         if (maybeJsonML.fragment) {
             maybeJsonML.fragment = maybeJsonML.fragment.filter(purgeEmpty)

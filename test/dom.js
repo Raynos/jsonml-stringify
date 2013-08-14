@@ -79,3 +79,12 @@ test("style properties", function (assert) {
 
     assert.end()
 })
+
+
+test("null is a valid element", function (assert) {
+    var elem = dom(null)
+
+    assert.equal(elem, null)
+
+    assert.end()
+})

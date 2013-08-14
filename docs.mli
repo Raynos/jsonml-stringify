@@ -34,27 +34,25 @@ type JsonMLPropertyKey := String
 type JsonMlPropertyValue := String | Number | Boolean
 type JsonMLProps := Object<JsonMLPropertyKey, JsonMlPropertyValue>
 
-type MaybeJsonMLChild :=
+type MaybeJsonML :=
     null |
     undefined |
-    MaybeJsonML
-
-type MaybeJsonML :=
     JsonMLTextContent |
     JsonMLRawContent |
-    { fragment: Array<MaybeJsonMLChild> } |
+    { fragment: Array<MaybeJsonML> } |
     [JsonMLSelector] |
     [JsonMLSelector, JsonMLRawContent] |
-    [JsonMLSelector, { fragment: Array<MaybeJsonMLChild> }] |
+    [JsonMLSelector, { fragment: Array<MaybeJsonML> }] |
     [JsonMLSelector, Object] |
     [JsonMLSelector, JsonMLTextContent] |
-    [JsonMLSelector, Array<MaybeJsonMLChild>] |
-    [JsonMLSelector, JsonMLProps, Array<MaybeJsonMLChild>] |
+    [JsonMLSelector, Array<MaybeJsonML>] |
+    [JsonMLSelector, JsonMLProps, Array<MaybeJsonML>] |
     [JsonMLSelector, JsonMLProps, JsonMLTextContent] |
-    [JsonMLSelector, JsonMLProps, { fragment: Array<MaybeJsonMLChild> }] |
+    [JsonMLSelector, JsonMLProps, { fragment: Array<MaybeJsonML> }] |
     [JsonMLSelector, JsonMLProps, JsonMLRawContent]
 
 type JsonML :=
+    null |
     JsonMLTextContent |
     JsonMLFragment |
     JsonMLRawContent |
@@ -63,3 +61,13 @@ type JsonML :=
         JsonMLProps,
         Array<JsonML>
     ]
+
+jsonml-stringify/dom := (jsonml: MaybeJsonML)
+    => DOMElement | DocumentFragment | DOMTextNode | null
+
+jsonml-stringify/normalize := (jsonml: MaybeJsonML) => JsonML
+
+jsonml-stringify := (jsonml: MaybeJsonML, opts?: {
+    indentation: String,
+    parentTagName: String
+}) => String

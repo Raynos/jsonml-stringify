@@ -15,7 +15,9 @@ module.exports = dom
 function dom(jsonml) {
     jsonml = normalize(jsonml)
 
-    if (typeof jsonml === "string") {
+    if (jsonml === null) {
+        return null
+    } else if (typeof jsonml === "string") {
         return document.createTextNode(jsonml)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return element(jsonml.raw)

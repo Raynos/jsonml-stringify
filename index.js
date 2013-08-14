@@ -22,7 +22,9 @@ function stringify(jsonml, opts) {
     var strings = []
     var firstChild, useWhitespace
 
-    if (typeof jsonml === "string") {
+    if (jsonml === null) {
+        return ""
+    } else if (typeof jsonml === "string") {
         return escapeHTMLTextContent(jsonml, parentTagName)
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return decode(jsonml.raw)
@@ -38,7 +40,6 @@ function stringify(jsonml, opts) {
         renderChildren(jsonml.fragment, "", true, useWhitespace)
         return strings.join("")
     }
-
 
     var selector = jsonml[0]
     var properties = jsonml[1]
