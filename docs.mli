@@ -39,13 +39,16 @@ type MaybeJsonML :=
     undefined |
     JsonMLTextContent |
     JsonMLRawContent |
+    Observable |
     { fragment: Array<MaybeJsonML> } |
     [JsonMLSelector] |
+    [JsonMLSelector, Observable] |
     [JsonMLSelector, JsonMLRawContent] |
     [JsonMLSelector, { fragment: Array<MaybeJsonML> }] |
     [JsonMLSelector, Object] |
     [JsonMLSelector, JsonMLTextContent] |
     [JsonMLSelector, Array<MaybeJsonML>] |
+    [JsonMLSelector, JsonMLProps, Observable] |
     [JsonMLSelector, JsonMLProps, Array<MaybeJsonML>] |
     [JsonMLSelector, JsonMLProps, JsonMLTextContent] |
     [JsonMLSelector, JsonMLProps, { fragment: Array<MaybeJsonML> }] |

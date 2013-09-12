@@ -64,12 +64,14 @@ function purgeEmpty(child) {
 function isSingleChild(maybeChild) {
     return typeof maybeChild === "string" ||
         (!!maybeChild && typeof maybeChild.raw === "string") ||
-        (!!maybeChild && Array.isArray(maybeChild.fragment))
+        (!!maybeChild && Array.isArray(maybeChild.fragment)) ||
+        typeof maybeChild === "function"
 }
 
 function isChildren(maybeChildren) {
     return isArray(maybeChildren) ||
         typeof maybeChildren === "string" ||
         (!!maybeChildren && typeof maybeChildren.raw === "string") ||
-        (!!maybeChildren && Array.isArray(maybeChildren.fragment))
+        (!!maybeChildren && Array.isArray(maybeChildren.fragment)) ||
+        typeof maybeChildren === "function"
 }
