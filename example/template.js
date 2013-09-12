@@ -6,11 +6,31 @@ var template = function (model) {
 				["li", ["y: ", model.y]]
 			]] : null
 		}),
-		["p", model.y]
+		["p", model.y],
+		["ol", [
+			list(model.zs, function (value) {
+				return ["li", [
+					["span", "item"],
+					["span", value]
+				]]
+			})
+		]]
 	]]
 }
 
 module.exports = template
+
+function list(observvArray, generateTemplate) {
+	return map(observvArray, function (record) {
+		if (!record) {
+			return null
+		}
+
+		var arr = record.value
+
+		return { fragment: arr.map(generateTemplate) }
+	})
+}
 
 
 function map(obs, lambda) {

@@ -40,7 +40,7 @@ function renderObserv(jsonml) {
     		}
 
     		if (elems.length) {
-    			elems[0].parentNode.replaceChild(target, elem)
+    			elems[0].parentNode.replaceChild(target, elem[0])
     			elems.slice(1).forEach(function (elem) {
     				elem.parentNode.removeChild(elem)
     			})
@@ -92,7 +92,7 @@ function placeholder() {
 }
 
 function getFragChildren(list, frag) {
-	if (frag.nodeType !== "#document-fragment") {
+	if (frag.nodeName !== "#document-fragment") {
 		return
 	}
 

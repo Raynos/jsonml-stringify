@@ -18,6 +18,8 @@ function applyObserv(surface, jsonml) {
         return
     } else if (!!jsonml && typeof jsonml.raw === "string") {
         return
+    } else if (!!jsonml && Array.isArray(jsonml.fragment)) {
+        return
     } else if (typeof jsonml === "function") {
     	var elem = surface
 
@@ -39,22 +41,38 @@ function applyObserv(surface, jsonml) {
     	if (child && Array.isArray(child.fragment)) {
     		var count = child.fragment.length
     		elem = [elem].concat(childNodes.splice(index + 1, count - 1))
-    	}
+    	} else if (child && typeof child === "function" &&
+            child() && Array.isArray(child().fragment)
+        ) {
+            var count = child().fragment.length
+            elem = [elem].concat(childNodes.splice(index + 1, count - 1))
+        }
 
         applyObserv(elem, child)
     })
 }
 
+// replaceNode(Element | Array<Element>, JsonML)
 function replaceNode(elem, jsonml) {
 	var target = renderObserv(jsonml)
+    var targetElem = target
 
 	if (target === null) {
-		target = placeholder()
-	}
+		target = targetElem = placeholder()
+	} else if (target.nodeName === "#document-fragment") {
+        targetElem = [].slice.call(target.childNodes)
+    }
 
-	elem.parentNode.replaceChild(target, elem)
+    if (Array.isArray(elem)) {
+        elem[0].parentNode.replaceChild(target, elem[0])
+        elem.slice(1).forEach(function (elem) {
+            elem.parentNode.removeChild(elem)
+        })
+    } else {
+        elem.parentNode.replaceChild(target, elem)    
+    }
 
-	return target	
+	return targetElem
 }
 
 function placeholder() {
@@ -64,7 +82,7 @@ function placeholder() {
 }
 
 function getFragChildren(list, frag) {
-	if (frag.nodeType !== "#document-fragment") {
+	if (frag.nodeName !== "#document-fragment") {
 		return
 	}
 
