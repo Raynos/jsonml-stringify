@@ -1,4 +1,5 @@
 var util = require("util")
+var extend = require("xtend")
 
 module.exports = normalize
 
@@ -55,9 +56,16 @@ function normalizeTree(tree, opts) {
 		children = [["#text", {}, children]]
 	}
 
-	var jsonml = [selector, properties, children.map(function (t) {
-		return normalize(t, plugins)
-	})]
+	var jsonml = [selector, properties, children]
+
+	if (opts.recur !== false) {
+		jsonml[2] = children.map(function (child) {
+			return normalize(child, extend(opts, {
+				parent: jsonml,
+				parents: opts.parents.concat([jsonml])
+			}))
+		})
+	}
 
 	if (typeof selector !== "string") {
 		throw new Error("Invalid JSONML data structure " +

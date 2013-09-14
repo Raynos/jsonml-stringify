@@ -18,36 +18,19 @@ var template = function (model) {
 
 module.exports = template
 
-function either(observ, left, right) {
-	return map(observ, function (state) {
-		return state ? left : right
-	})
+function either(bool, left, right) {
+	return {
+		type: "either",
+		bool: bool,
+		left: left,
+		right: right
+	}
 }
 
-function list(observvArray, generateTemplate) {
-	return map(observvArray, function (record) {
-		if (!record) {
-			return null
-		}
-
-		var arr = record.value
-
-		return { fragment: arr.map(generateTemplate) }
-	})
-}
-
-
-function map(obs, lambda) {
-	var state = lambda(obs())
-
-	return function observ(listener) {
-		if (!listener) {
-			return state
-		}
-
-		obs(function (v) {
-			state = lambda(v)
-			listener(state)
-		})
+function list(array, generateTemplate) {
+	return {
+		type: "list",
+		array: array, 
+		template: generateTemplate
 	}
 }

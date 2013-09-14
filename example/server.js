@@ -2,8 +2,14 @@ var http = require("http")
 var ServeBrowserify = require("serve-browserify")
 var JSONGlobals = require("json-globals")
 
-var stringify = require("./jsonml/stringify.js")
+var Stringify = require("./jsonml/stringify.js")
 var template = require("./template")
+
+var stringify = Stringify([
+	require("./jsonml/plugin-fragment.js"),
+	require("./plugin-either.js"),
+	require("./plugin-list.js")
+])
 
 http.createServer(function (req, res) {
 	if (req.url === "/browser") {

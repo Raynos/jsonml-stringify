@@ -8,4 +8,3 @@ function Stringify(plugins) {
 		return stringifyRecur(normalize(tree, opts, plugins), opts)
 	}
 }
-
