@@ -1,11 +1,9 @@
 var template = function (model) {
 	return ["div", [
-		map(model.x, function (state) {
-			return state ? ["div", [
-				["li", ["x: ", state]],
-				["li", ["y: ", model.y]]
-			]] : null
-		}),
+		either(model.x, ["div", [
+			["li", ["x: ", model.x]],
+			["li", ["y: ", model.y]]
+		]], null),
 		["p", model.y],
 		["ol", [
 			list(model.zs, function (value) {
@@ -19,6 +17,12 @@ var template = function (model) {
 }
 
 module.exports = template
+
+function either(observ, left, right) {
+	return map(observ, function (state) {
+		return state ? left : right
+	})
+}
 
 function list(observvArray, generateTemplate) {
 	return map(observvArray, function (record) {
