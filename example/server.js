@@ -2,7 +2,7 @@ var http = require("http")
 var ServeBrowserify = require("serve-browserify")
 var JSONGlobals = require("json-globals")
 
-var stringify = require("./stringify-observ.js")
+var stringify = require("./jsonml/stringify.js")
 var template = require("./template")
 
 http.createServer(function (req, res) {

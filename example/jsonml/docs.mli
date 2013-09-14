@@ -1,13 +1,14 @@
 (* 
 JsonML is both loosely and strictly defined.
 
-Strict:
-	- null
-	- [ tagName , properties, children ]
-	- [ '#text' , properties , text content ]
-
 A plugin is an object literal with either a single key / value
 	pair or a key 'type' and some properties
+
+Strict:
+	- null
+	- plugin
+	- [ tagName , properties, children ]
+	- [ '#text' , properties , text content ]
 
 Loose:
 	- null

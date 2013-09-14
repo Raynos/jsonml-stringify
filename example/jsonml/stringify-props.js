@@ -2,28 +2,31 @@ var isDoubleQuote = /"/g
 var isSingleQuote = /'/g
 var camelCase = /([a-z][A-Z])/g
 
-module.exports = stringifyProps
+module.exports = stringifyProperty
 
-function stringifyProps(properties) {
-    var attrString = Object.keys(properties).map(function (key) {
-        var value = properties[key]
+function stringifyProperty(value, key, opts) {
+    if (key === "style") {
+        value = stylify(value)
+    } else if (key === "className") {
+        key = "class"
+    }
 
-        if (key === "style") {
-            value = stylify(value)
-        } else if (key === "className") {
-            key = "class"
-        }
+    if (value === true) {
+        return key
+    } else if (value === false) {
+        return ""
+    }
 
-        if (value === true) {
-            return key
-        } else if (value === false) {
-            return ""
-        }
+    if (isObject(value) || typeof value === "function") {
+        getPlugin(value, opts)
+            .stringifyProperty(value, key, opts)
+    }
 
-        return key + "=\"" + escapeHTMLAttributes(value) + "\""
-    }).join(" ").trim()
+    return key + "=\"" + escapeHTMLAttributes(value) + "\""    
+}
 
-    return attrString === "" ? "" : " " + attrString
+function isObject(obj) {
+    return typeof obj === "object" && obj !== null
 }
 
 function stylify(styles) {

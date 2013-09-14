@@ -2,7 +2,23 @@ var util = require("util")
 
 module.exports = normalize
 
-function normalize(tree, plugins) {
+function normalize(tree, opts, plugins) {
+	opts = opts || {}
+	opts.plugins = (opts.plugins || []).concat(plugins)
+	tree = normalizeTree(tree, opts)
+	var parent = (opts.parent = opts.parent || null)
+	var parents = (opts.parents = opts.parents || [])
+
+	plugins.forEach(function (plugin) {
+		if (typeof plugin.normalize === "function") {
+			tree = plugin.normalize(tree, opts)
+		}
+	})
+
+	return tree
+}
+
+function normalizeTree(tree, opts) {
 	if (tree === null || tree === undefined) {
 		return tree
 	}
@@ -24,6 +40,7 @@ function normalize(tree, plugins) {
 	var selector = tree[0]
 	var properties = tree[1] || {}
 	var children = tree[2] || []
+	plugins = opts.plugins
 
 	if (isChildren(properties, plugins)) {
 		children = properties
