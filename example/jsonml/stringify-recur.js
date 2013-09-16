@@ -11,7 +11,7 @@ module.exports = stringifyRecur
 function stringifyRecur(tree, opts) {
 	if (tree === null) {
 		return ""
-	} else if (isObject(tree) || typeof tree === "function") {
+	} else if (isPlugin(tree)) {
 		return getPlugin(tree, opts).stringify(tree, opts)
 	}
 
@@ -28,7 +28,7 @@ function stringifyRecur(tree, opts) {
 	var attrString = Object.keys(properties).map(function (key) {
 		var value = properties[key]
 
-		return stringifyProperty(value, opts)
+		return stringifyProperty(value, key, opts)
 	}).join(" ").trim()
 	attrString = attrString === "" ? "" : " " + attrString
 
@@ -46,6 +46,10 @@ function stringifyRecur(tree, opts) {
 	strings.push("</" + tagName + ">")
 
 	return strings.join("")
+}
+
+function isPlugin(obj) {
+	return !Array.isArray(obj) && (isObject(obj) || typeof obj === "function")
 }
 
 function isObject(obj) {

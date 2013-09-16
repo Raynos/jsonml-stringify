@@ -1,3 +1,5 @@
+var util = require("util")
+
 module.exports = getPlugin
 
 function getPlugin(tree, opts) {
@@ -6,21 +8,21 @@ function getPlugin(tree, opts) {
 
 	if (!plugin) {
 		throw new Error("Invalid JSONML data structure " +
-			util.inspect(tree) + " Unknown plugin")
+			util.inspect(tree) + " Unknown plugin " + type)
 	}
 
 	return plugin
 }
 
 function getType(plugin) {
-	if (typeof hash === "function") {
+	if (typeof plugin === "function") {
 		return "#function"
 	}
 
-	var type = hash.type
+	var type = plugin.type
 
 	if (!type) {
-		var keys = Object.keys(hash)
+		var keys = Object.keys(plugin)
 
 		if (keys.length !== 1) {
 			return false

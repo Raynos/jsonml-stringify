@@ -1,3 +1,5 @@
+var getPlugin = require("./get-plugin.js")
+
 var isDoubleQuote = /"/g
 var isSingleQuote = /'/g
 var camelCase = /([a-z][A-Z])/g
@@ -17,12 +19,16 @@ function stringifyProperty(value, key, opts) {
         return ""
     }
 
-    if (isObject(value) || typeof value === "function") {
+    if (isPlugin(value)) {
         getPlugin(value, opts)
             .stringifyProperty(value, key, opts)
     }
 
     return key + "=\"" + escapeHTMLAttributes(value) + "\""    
+}
+
+function isPlugin(obj) {
+    return !Array.isArray(obj) && (isObject(tree) || typeof obj === "function")
 }
 
 function isObject(obj) {

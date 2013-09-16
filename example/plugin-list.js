@@ -1,5 +1,6 @@
 module.exports = {
-	stringify: function () {
-		
-	}
+	stringify: function (tree, opts) {
+		return { fragment: tree.array.map(tree.template) }
+	},
+	type: "list"
 }

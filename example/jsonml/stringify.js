@@ -5,6 +5,8 @@ module.exports = Stringify
 
 function Stringify(plugins) {
 	return function stringify(tree, opts) {
+		opts = opts || {}
+
 		return stringifyRecur(normalize(tree, opts, plugins), opts)
 	}
 }

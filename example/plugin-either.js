@@ -1,4 +1,4 @@
-var stringifyRecur = require("./stringify-recur.js")
+var stringifyRecur = require("./jsonml/stringify-recur.js")
 
 module.exports = {
 	type: "either",

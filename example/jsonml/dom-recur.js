@@ -2,6 +2,7 @@ var document = require("global/document")
 var DataSet = require("data-set")
 var extend = require("xtend")
 
+var isPlugin = require("./is-plugin.js")
 var getPlugin = require("./get-plugin.js")
 var unpackSelector = require("./unpack-selector.js")
 
@@ -10,7 +11,7 @@ module.exports = domRecur
 function domRecur(tree, opts) {
 	if (tree === null) {
 		return null
-	} else if (isObject(tree) || typeof tree === "function") {
+	} else if (isPlugin(tree)) {
 		return getPlugin(tree, opts).dom(tree, opts)
 	}
 
@@ -57,15 +58,11 @@ function renderProperty(elem, value, key, opts) {
     } else if (key.substr(0, 5) === "data-") {
         DataSet(elem)[key.substr(5)] = value
     } else {
-    	if (isObject(value) || typeof value === "function") {
+    	if (isPlugin(value)) {
     		getPlugin(value, opts)
     			.renderProperty(elem, value, key, opts)
     	} else {
     		elem[key] = value
     	}
     }
-}
-
-function isObject(obj) {
-	return typeof obj === "object" && obj !== null
 }
