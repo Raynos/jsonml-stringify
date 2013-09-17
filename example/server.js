@@ -29,7 +29,7 @@ http.createServer(function (req, res) {
 			]],
 			["body", [
 				["div", { id: "main" }, [
-					template(model)
+					// template(model)
 				]],
 				["script", JSONGlobals({ model: model })],
 				["script", { src: "/browser" }]

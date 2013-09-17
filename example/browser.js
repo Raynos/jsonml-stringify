@@ -1,10 +1,17 @@
 var Observ = require("observ")
-var renderObserv = require("./render-observ")
-var applyObserv = require("./apply-observ")
 var JSONGlobals = require("json-globals/get")
 
+var Dom = require("./jsonml/dom.js")
 var ObservableArray = require("./observable-array.js")
 var template = require("./template")
+
+var dom = Dom([
+	require("./jsonml/plugins/loose.js"),
+	require("./jsonml/plugins/fragment.js"),
+	require("./jsonml/plugins/observ.js"),
+	require("./plugin-either.js"),
+	require("./plugin-list.js"),
+])
 
 var state = JSONGlobals("model")
 var model = window.model = Object.keys(state).reduce(function (acc, key) {
@@ -14,13 +21,7 @@ var model = window.model = Object.keys(state).reduce(function (acc, key) {
 		ObservableArray(value) : Observ(value)
 	return acc
 }, {})
-var mainElem = document.getElementById("main")
 
-if (mainElem) {
-	console.log("APPLY")
-	applyObserv(mainElem.firstChild, template(model))
-} else {
-	console.log("RENDER")
-	var elem = renderObserv(template(model))
-	document.body.appendChild(elem)
-}
+console.log("RENDER")
+var elem = dom(template(model))
+document.body.appendChild(elem)

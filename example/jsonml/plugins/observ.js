@@ -1,6 +1,6 @@
 var stringifyRecur = require("../stringify-recur.js")
 var domRecur = require("../dom-recur.js")
-var normalize = reuqire("../normalize.js")
+var normalize = require("../normalize.js")
 
 module.exports = {
 	stringify: function (tree, opts) {

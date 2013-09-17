@@ -25,7 +25,7 @@ function domRecur(tree, opts) {
 
 	var tagName = unpackSelector(selector, properties)
 
-	var elem = document.createElement(tagName.toUppserCase())
+	var elem = document.createElement(tagName.toUpperCase())
 	Object.keys(properties).forEach(function (key) {
 		var value = properties[key]
 

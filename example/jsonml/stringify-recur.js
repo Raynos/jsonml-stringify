@@ -7,6 +7,8 @@ var stringifyProperty = require("./lib/stringify-property.js")
 var isPlugin = require("./lib/is-plugin.js")
 var getPlugin = require("./lib/get-plugin.js")
 
+var endingScriptTag = /<\/script>/g
+
 module.exports = stringifyRecur
 
 function stringifyRecur(tree, opts) {
@@ -22,7 +24,7 @@ function stringifyRecur(tree, opts) {
 	var strings = []
 
 	if (selector === "#text") {
-		return encode(children)
+		return escapeHTMLTextContent(children, opts)
 	}
 
 	var tagName = unpackSelector(selector, properties)
@@ -52,4 +54,19 @@ function stringifyRecur(tree, opts) {
 	strings.push("</" + tagName + ">")
 
 	return strings.join("")
+}
+
+function escapeHTMLTextContent(string, opts) {
+	var selector = opts.parent ? opts.parent[0] : ""
+	var tagName = unpackSelector(selector, {})
+
+	var escaped = String(string)
+
+    if (tagName !== "script" && tagName !== "style") {
+        escaped = encode(escaped)
+    } else if (tagName === "script") {
+        escaped = escaped.replace(endingScriptTag, "<\\\/script>")
+    }
+
+    return escaped
 }
