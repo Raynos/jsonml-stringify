@@ -7,8 +7,9 @@ A plugin is an object literal with either a single key / value
 Strict:
 	- null
 	- plugin
-	- [ tagName , properties, children ]
+	- [ tagName , properties , children ]
 	- [ '#text' , properties , text content ]
+	- [ '#text' , properties , plugin ]
 
 Loose:
 	- null
@@ -36,7 +37,7 @@ type JsonML :=
 	null |
 	JsonMLPlugin |
 	[ String , JsonMLProperties , Array<JsonML> ] |
-	[ "#text" , JsonMLProperties , String ]
+	[ "#text" , JsonMLProperties , String | JsonMLPlugin ]
 
 
 type LooseJsonML := 
