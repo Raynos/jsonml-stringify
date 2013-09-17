@@ -1,10 +1,10 @@
 var document = require("global/document")
-var DataSet = require("data-set")
 var extend = require("xtend")
 
-var isPlugin = require("./is-plugin.js")
-var getPlugin = require("./get-plugin.js")
-var unpackSelector = require("./unpack-selector.js")
+var isPlugin = require("./lib/is-plugin.js")
+var getPlugin = require("./lib/get-plugin.js")
+var renderProperty = require("./lib/render-property.js")
+var unpackSelector = require("./lib/unpack-selector.js")
 
 module.exports = domRecur
 
@@ -46,23 +46,4 @@ function domRecur(tree, opts) {
 	}
 
 	return elem
-}
-
-function renderProperty(elem, value, key, opts) {
-    if (key === "class") {
-        elem.className = value
-    } else if (key === "style") {
-        Object.keys(value).forEach(function (key) {
-            elem.style[key] = value[key]
-        })
-    } else if (key.substr(0, 5) === "data-") {
-        DataSet(elem)[key.substr(5)] = value
-    } else {
-    	if (isPlugin(value)) {
-    		getPlugin(value, opts)
-    			.renderProperty(elem, value, key, opts)
-    	} else {
-    		elem[key] = value
-    	}
-    }
 }

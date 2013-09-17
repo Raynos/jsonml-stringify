@@ -1,8 +1,14 @@
 var template = function (model) {
 	return ["div", [
 		either(model.x, ["div", [
-			["li", ["x: ", model.x]],
-			["li", ["y: ", model.y]]
+			["li", [
+				["span", "x: "],
+				["span", model.x]
+			]],
+			["li", [
+				["span", "y: "],
+				["span", model.y]
+			]]
 		]], null),
 		["p", model.y],
 		["ol", [

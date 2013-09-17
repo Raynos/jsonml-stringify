@@ -2,9 +2,10 @@ var util = require("util")
 var encode = require("ent").encode
 var extend = require("xtend")
 
-var unpackSelector = require("./unpack-selector.js")
-var stringifyProperty = require("./stringify-property.js")
-var getPlugin = require("./get-plugin.js")
+var unpackSelector = require("./lib/unpack-selector.js")
+var stringifyProperty = require("./lib/stringify-property.js")
+var isPlugin = require("./lib/is-plugin.js")
+var getPlugin = require("./lib/get-plugin.js")
 
 module.exports = stringifyRecur
 
@@ -34,6 +35,11 @@ function stringifyRecur(tree, opts) {
 
 	strings.push("<" + tagName + attrString + ">")
 
+	if (!children) {
+		throw new Error("Invalid JSONML data structure " + 
+			util.inspect(tree) + " No children")
+	}
+
 	for (var i = 0; i < children.length; i++) {
 		var childOpts = extend(opts, {
 			parent: tree,
@@ -46,12 +52,4 @@ function stringifyRecur(tree, opts) {
 	strings.push("</" + tagName + ">")
 
 	return strings.join("")
-}
-
-function isPlugin(obj) {
-	return !Array.isArray(obj) && (isObject(obj) || typeof obj === "function")
-}
-
-function isObject(obj) {
-	return typeof obj === "object" && obj !== null
 }

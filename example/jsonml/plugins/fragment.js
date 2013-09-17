@@ -1,14 +1,15 @@
 var document = require("global/document")
 
-var stringifyRecur = require("./stringify-recur.js")
-var domRecur = require("./dom-recur.js")
+var stringifyRecur = require("../stringify-recur.js")
+var domRecur = require("../dom-recur.js")
+var normalize = require("../normalize.js")
 
 module.exports = {
 	stringify: function (tree, opts) {
 		var strings = []
 
 		for (var i = 0; i < tree.fragment.length; i++) {
-			strings.push(stringifyRecur(tree.fragment[i], opts))
+			strings.push(stringify(tree.fragment[i], opts))
 		}
 
 		return strings.join("")
@@ -16,7 +17,7 @@ module.exports = {
 	dom: function (tree, opts) {
 		var frag = document.createDocumentFragment()
 		tree.fragment.forEach/(function (child) {
-			var elem = domRecur(child, opts)
+			var elem = dom(child, opts)
 
 			if (elem !== null) {
 				frag.appendChild(elem)	
@@ -25,4 +26,12 @@ module.exports = {
 		return frag
 	},
 	type: "fragment"
+}
+
+function stringify(tree, opts) {
+	return stringifyRecur(normalize(tree, opts), opts)
+}
+
+function dom(tree, opts) {
+	return domRecur(normalize(tree, opts), opts)
 }

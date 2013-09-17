@@ -1,4 +1,5 @@
 var getPlugin = require("./get-plugin.js")
+var isPlugin = require("./is-plugin.js")
 
 var isDoubleQuote = /"/g
 var isSingleQuote = /'/g
@@ -25,14 +26,6 @@ function stringifyProperty(value, key, opts) {
     }
 
     return key + "=\"" + escapeHTMLAttributes(value) + "\""    
-}
-
-function isPlugin(obj) {
-    return !Array.isArray(obj) && (isObject(tree) || typeof obj === "function")
-}
-
-function isObject(obj) {
-    return typeof obj === "object" && obj !== null
 }
 
 function stylify(styles) {

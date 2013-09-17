@@ -1,10 +1,12 @@
 var util = require("util")
 var extend = require("xtend")
 
-var isPluginFast = require("./is-plugin.js")
-var getPlugin = require("./get-plugin.js")
+var isPluginFast = require("../lib/is-plugin.js")
+var getPluginSafe = require("../lib/get-plugin.js").getPluginSafe
 
-module.exports = normalizeTree
+module.exports = {
+	normalize: normalizeTree
+}
 
 function normalizeTree(tree, opts) {
 	if (tree === null || tree === undefined) {
@@ -48,7 +50,7 @@ function normalizeTree(tree, opts) {
 
 	if (opts.recur !== false && Array.isArray(children)) {
 		jsonml[2] = children.map(function (child) {
-			return normalize(child, extend(opts, {
+			return normalizeTree(child, extend(opts, {
 				parent: jsonml,
 				parents: opts.parents.concat([jsonml])
 			}))
@@ -78,36 +80,9 @@ function normalizeTree(tree, opts) {
 function isChildren(maybeChildren, opts) {
 	return Array.isArray(maybeChildren) ||
 		typeof maybeChildren === "string" ||
-		isValidPlugin(maybeChildren, opts)
+		!!getPluginSafe(maybeChildren, opts)
 }
 
 function isObject(obj) {
 	return typeof obj === "object" && obj !== null
-}
-
-function isValidPlugin(hash, plugins) {
-	if (typeof hash === "function") {
-		return true
-	}
-
-	if (Array.isArray(hash)) {
-		return false
-	}
-
-	var pluginb = getPlugin(hash, opts)
-
-	if (!isObject(hash)) {
-		return false
-	}
-
-	var type = getType(hash)
-
-	for (var i = 0; i < plugins.length; i++) {
-		console.log("plugins", plugins)
-		if (plugins[i].type === type) {
-			return true
-		}
-	}
-
-	return false
 }

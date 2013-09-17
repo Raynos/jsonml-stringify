@@ -6,7 +6,8 @@ var Stringify = require("./jsonml/stringify.js")
 var template = require("./template")
 
 var stringify = Stringify([
-	require("./jsonml/plugin-fragment.js"),
+	require("./jsonml/plugins/loose.js"),
+	require("./jsonml/plugins/fragment.js"),
 	require("./plugin-either.js"),
 	require("./plugin-list.js")
 ])

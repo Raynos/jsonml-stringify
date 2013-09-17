@@ -1,8 +1,15 @@
 var util = require("util")
 
+getPlugin.getPluginSafe = getPluginSafe
+
 module.exports = getPlugin
 
 function getPlugin(tree, opts) {
+	if (Array.isArray(tree)) {
+		throw new Error("Invalid JSONML data structure " +
+			util.inspect(tree) + " Array is not a plugin")
+	}
+
 	var type = getType(tree)
 	var plugin = findPlugin(opts.plugins, type)
 
@@ -12,6 +19,10 @@ function getPlugin(tree, opts) {
 	}
 
 	return plugin
+}
+
+function getPluginSafe(tree, opts) {
+	return !!findPlugin(opts.plugins, getType(tree))
 }
 
 function getType(plugin) {
