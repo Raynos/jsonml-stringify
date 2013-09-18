@@ -13,6 +13,10 @@ function normalizeTree(tree, opts) {
 		return tree
 	}
 
+	if (typeof tree === "string") {
+		return ["#text", {}, tree]
+	}
+
 	if (isPluginFast(tree)) {
 		return tree
 	}
@@ -46,8 +50,6 @@ function normalizeTree(tree, opts) {
 
 	var jsonml = [selector, properties, children]
 
-	console.log("jsonml", typeof children, jsonml)
-
 	if (opts.recur !== false && Array.isArray(children)) {
 		jsonml[2] = children.map(function (child) {
 			return normalizeTree(child, extend(opts, {
@@ -71,8 +73,6 @@ function normalizeTree(tree, opts) {
 		throw new Error("Invalid JSONML data structure " +
 			util.inspect(jsonml) + " Text node needs to contain text")
 	}
-
-	console.log("jsonml", require("util").inspect(jsonml, null, 10))
 
 	return jsonml
 }

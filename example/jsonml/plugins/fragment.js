@@ -16,7 +16,7 @@ module.exports = {
 	},
 	dom: function (tree, opts) {
 		var frag = document.createDocumentFragment()
-		tree.fragment.forEach/(function (child) {
+		tree.fragment.forEach(function (child) {
 			var elem = dom(child, opts)
 
 			if (elem !== null) {

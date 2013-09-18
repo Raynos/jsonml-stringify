@@ -9,6 +9,21 @@ module.exports = {
 			tree.bool ? tree.left : tree.right, opts)
 	},
 	dom: function (tree, opts) {
+		var leftElem = dom(tree.left, opts) || placeholder()
+		var rightElem = dom(tree.right, opts) || placeholder()
+
+		var currElem = tree.bool() ? leftElem : rightElem
+
+		tree.bool(function (bool) {
+			var newElem = bool ? leftElem : rightElem
+
+			currElem.parentNode.replaceChild(newElem, currElem)
+
+			currElem = newElem
+		})
+
+		return currElem
+
 		return dom(
 			tree.bool() ? tree.left : tree.right, opts)
 	}
@@ -20,4 +35,8 @@ function stringify(tree, opts) {
 
 function dom(tree, opts) {
 	return domRecur(normalize(tree, opts), opts)
+}
+
+function placeholder() {
+	return document.createElement("span")
 }

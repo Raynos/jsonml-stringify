@@ -28,9 +28,11 @@ http.createServer(function (req, res) {
 				["title", "Observable demo"]
 			]],
 			["body", [
+				["div", "Server"],
 				["div", { id: "main" }, [
-					// template(model)
+					template(model)
 				]],
+				["div", "Client"],
 				["script", JSONGlobals({ model: model })],
 				["script", { src: "/browser" }]
 			]]

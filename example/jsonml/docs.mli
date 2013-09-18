@@ -14,6 +14,7 @@ Loose:
 	- null
 	- undefined
 	- plugin
+	- text content
 	- [ tagName ]
 	- [ tagName , properties ]
 	- [ tagName , text content ]
@@ -43,6 +44,7 @@ type LooseJsonML :=
 	null |
 	undefined |
 	JsonMLPlugin |
+	String |
 	[ String ] |
 	[ String , JsonMLProperties ] |
 	[ String , String ] |

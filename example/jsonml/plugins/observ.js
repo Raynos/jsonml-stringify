@@ -4,10 +4,16 @@ var normalize = require("../normalize.js")
 
 module.exports = {
 	stringify: function (tree, opts) {
-		stringify(tree(), opts)
+		return stringify(tree(), opts)
 	},
 	dom: function (tree, opts) {
-		dom(tree(), opts)
+		var elem = dom(tree(), opts)
+
+		tree(function (value) {
+			elem.data = value
+		})
+
+		return elem
 	},
 	type: "#function"
 }

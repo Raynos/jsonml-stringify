@@ -19,7 +19,8 @@ function domRecur(tree, opts) {
 	var properties = tree[1]
 	var children = tree[2]
 
-	if (typeof selector === "#text") {
+	if (selector === "#text") {
+		console.log("children", children)
 		return document.createTextNode(children)
 	}
 

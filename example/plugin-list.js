@@ -9,9 +9,13 @@ module.exports = {
 		}, opts)
 	},
 	dom: function (tree, opts) {
-		return dom({
+		var elem = dom({
 			fragment: tree.array().value.map(tree.template)
 		}, opts)
+
+		console.log("elem", [].slice.call(elem.childNodes))
+
+		return elem
 	},
 	type: "list"
 }
