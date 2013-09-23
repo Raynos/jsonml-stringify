@@ -12,55 +12,55 @@ var endingScriptTag = /<\/script>/g
 module.exports = stringifyRecur
 
 function stringifyRecur(tree, opts) {
-	if (tree === null) {
-		return ""
-	} else if (isPlugin(tree)) {
-		return getPlugin(tree, opts).stringify(tree, opts)
-	}
+    if (tree === null) {
+        return ""
+    } else if (isPlugin(tree)) {
+        return getPlugin(tree, opts).stringify(tree, opts)
+    }
 
-	var selector = tree[0]
-	var properties = tree[1]
-	var children = tree[2]
-	var strings = []
+    var selector = tree[0]
+    var properties = tree[1]
+    var children = tree[2]
+    var strings = []
 
-	if (selector === "#text") {
-		return escapeHTMLTextContent(children, opts)
-	}
+    if (selector === "#text") {
+        return escapeHTMLTextContent(children, opts)
+    }
 
-	var tagName = unpackSelector(selector, properties)
-	var attrString = Object.keys(properties).map(function (key) {
-		var value = properties[key]
+    var tagName = unpackSelector(selector, properties)
+    var attrString = Object.keys(properties).map(function (key) {
+        var value = properties[key]
 
-		return stringifyProperty(value, key, opts)
-	}).join(" ").trim()
-	attrString = attrString === "" ? "" : " " + attrString
+        return stringifyProperty(value, key, opts)
+    }).join(" ").trim()
+    attrString = attrString === "" ? "" : " " + attrString
 
-	strings.push("<" + tagName + attrString + ">")
+    strings.push("<" + tagName + attrString + ">")
 
-	if (!children) {
-		throw new Error("Invalid JSONML data structure " + 
-			util.inspect(tree) + " No children")
-	}
+    if (!children) {
+        throw new Error("Invalid JSONML data structure " +
+            util.inspect(tree) + " No children")
+    }
 
-	for (var i = 0; i < children.length; i++) {
-		var childOpts = extend(opts, {
-			parent: tree,
-			parents: opts.parents.concat([tree])
-		})
+    for (var i = 0; i < children.length; i++) {
+        var childOpts = extend(opts, {
+            parent: tree,
+            parents: opts.parents.concat([tree])
+        })
 
-		strings.push(stringifyRecur(children[i], childOpts))
-	}
+        strings.push(stringifyRecur(children[i], childOpts))
+    }
 
-	strings.push("</" + tagName + ">")
+    strings.push("</" + tagName + ">")
 
-	return strings.join("")
+    return strings.join("")
 }
 
 function escapeHTMLTextContent(string, opts) {
-	var selector = opts.parent ? opts.parent[0] : ""
-	var tagName = unpackSelector(selector, {})
+    var selector = opts.parent ? opts.parent[0] : ""
+    var tagName = unpackSelector(selector, {})
 
-	var escaped = String(string)
+    var escaped = String(string)
 
     if (tagName !== "script" && tagName !== "style") {
         escaped = encode(escaped)

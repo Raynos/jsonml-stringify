@@ -15,11 +15,11 @@ function renderProperty(elem, value, key, opts) {
     } else if (key.substr(0, 5) === "data-") {
         DataSet(elem)[key.substr(5)] = value
     } else {
-    	if (isPlugin(value)) {
-    		getPlugin(value, opts)
-    			.renderProperty(elem, value, key, opts)
-    	} else {
-    		elem[key] = value
-    	}
+        if (isPlugin(value)) {
+            getPlugin(value, opts)
+                .renderProperty(elem, value, key, opts)
+        } else {
+            elem[key] = value
+        }
     }
 }

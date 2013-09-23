@@ -20,7 +20,8 @@
     "global": "~2.0.7",
     "data-set": "~0.2.2",
     "element": "~0.1.4",
-    "ent": "0.0.5"
+    "ent": "0.0.5",
+    "insert": "~1.0.1"
   },
   "devDependencies": {
     "tape": "~1.0.4",

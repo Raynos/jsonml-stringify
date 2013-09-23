@@ -4,9 +4,9 @@ var stringifyRecur = require("./stringify-recur.js")
 module.exports = Stringify
 
 function Stringify(plugins) {
-	return function stringify(tree, opts) {
-		opts = opts || {}
+    return function stringify(tree, opts) {
+        opts = opts || {}
 
-		return stringifyRecur(normalize(tree, opts, plugins), opts)
-	}
+        return stringifyRecur(normalize(tree, opts, plugins), opts)
+    }
 }

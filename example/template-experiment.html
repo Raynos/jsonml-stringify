@@ -1,0 +1,18 @@
+<div>
+    {{if x}}
+        <div>
+            <li>x: {{x}}</li>
+            <li>y: {{y}}</li>
+        </div>
+    {{else}}
+    {{/if}}
+    <p>{{y}}</p>
+    <ol>
+        {{list zs:z}}
+            <li>
+                <span>item</span>
+                <span>{{z}}</span>
+            </li>
+        {{/list}}
+    </ol>
+</div>
