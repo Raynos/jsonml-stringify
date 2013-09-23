@@ -25,6 +25,9 @@ module.exports = {
         var currElem = tree.bool() ? leftElem : rightElem
 
         return currElem
+    },
+    merge: function (tree, opts) {
+        
     }
 }
 

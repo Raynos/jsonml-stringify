@@ -21,11 +21,11 @@ function stringifyProperty(value, key, opts) {
     }
 
     if (isPlugin(value)) {
-        getPlugin(value, opts)
+        return getPlugin(value, opts)
             .stringifyProperty(value, key, opts)
     }
 
-    return key + "=\"" + escapeHTMLAttributes(value) + "\""    
+    return key + "=\"" + escapeHTMLAttributes(value) + "\""
 }
 
 function stylify(styles) {

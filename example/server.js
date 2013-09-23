@@ -8,8 +8,8 @@ var template = require("./template")
 var stringify = Stringify([
     require("./jsonml/plugins/loose.js"),
     require("./jsonml/plugins/fragment.js"),
-    require("./plugin-either.js"),
-    require("./plugin-list.js")
+    require("./lib/plugin-either.js"),
+    require("./lib/plugin-list.js")
 ])
 
 http.createServer(function (req, res) {
