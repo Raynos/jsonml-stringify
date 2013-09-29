@@ -2,9 +2,9 @@ var before = require("insert/before")
 var remove = require("insert/remove")
 var document = require("global/document")
 
-var stringifyRecur = require("../jsonml/stringify-recur.js")
-var domRecur = require("../jsonml/dom-recur.js")
-var normalize = require("../jsonml/normalize.js")
+var stringifyRecur = require("../../stringify-recur.js")
+var domRecur = require("../../dom-recur.js")
+var normalize = require("../../normalize.js")
 
 module.exports = {
     stringify: function (tree, opts) {

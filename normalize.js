@@ -1,77 +1,16 @@
-var util = require("util")
-
-var isArray = Array.isArray
-
 module.exports = normalize
 
-/*
-    @require ./jsonml.types
+function normalize(tree, opts, plugins) {
+    opts = opts || {}
+    opts.plugins = (opts.plugins || []).concat(plugins || [])
+    opts.parent = opts.parent || null
+    opts.parents = opts.parents || []
 
-    normalize := (MaybeJsonML) => JsonML
-*/
-function normalize(maybeJsonML) {
-    if (maybeJsonML === null || maybeJsonML === undefined) {
-        return null
-    }
-
-    if (isSingleChild(maybeJsonML)) {
-        if (maybeJsonML.fragment) {
-            maybeJsonML.fragment = maybeJsonML.fragment.filter(purgeEmpty)
+    opts.plugins.forEach(function (plugin) {
+        if (typeof plugin.normalize === "function") {
+            tree = plugin.normalize(tree, opts)
         }
+    })
 
-        return maybeJsonML
-    }
-
-    if (Array.isArray(maybeJsonML) && maybeJsonML.length === 0) {
-        throw new Error("Invalid JSONML data structure " +
-            util.inspect(maybeJsonML) + " Empty array is not a valid element")
-    }
-
-    var selector = maybeJsonML[0]
-    var hash = maybeJsonML[1]
-    var children = maybeJsonML[2]
-
-    if (!children && isChildren(hash)) {
-        children = hash
-        hash = {}
-    }
-
-    if (isSingleChild(children)) {
-        children = [children]
-    }
-
-    children = (children || []).filter(purgeEmpty)
-    hash = hash || {}
-
-    var jsonml = [selector, hash, children]
-
-    if (typeof selector !== "string") {
-        throw new Error("Invalid JSONML data structure " +
-            util.inspect(jsonml) + " Selector is not a string")
-    }
-    if (typeof hash !== "object" || hash === null) {
-        throw new Error("Invalid JSONML data structure " +
-            util.inspect(jsonml) + " Properties is not an object")
-    }
-
-    return jsonml
-}
-
-function purgeEmpty(child) {
-    return child !== null && child !== undefined
-}
-
-function isSingleChild(maybeChild) {
-    return typeof maybeChild === "string" ||
-        (!!maybeChild && typeof maybeChild.raw === "string") ||
-        (!!maybeChild && Array.isArray(maybeChild.fragment)) ||
-        typeof maybeChild === "function"
-}
-
-function isChildren(maybeChildren) {
-    return isArray(maybeChildren) ||
-        typeof maybeChildren === "string" ||
-        (!!maybeChildren && typeof maybeChildren.raw === "string") ||
-        (!!maybeChildren && Array.isArray(maybeChildren.fragment)) ||
-        typeof maybeChildren === "function"
+    return tree
 }

@@ -1,7 +1,12 @@
 var test = require("tape")
 var document = require("global/document")
 
-var dom = require("../dom")
+var Dom = require("../dom")
+var dom = Dom([
+    require("../plugins/loose.js"),
+    require("../plugins/fragment.js"),
+    require("../plugins/raw.js")
+])
 
 test("dom properly converts jsonml to element", function (assert) {
     var elem = dom(["html", [

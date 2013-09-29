@@ -1,12 +1,16 @@
 var test = require("tape")
 
-var stringify = require("../index")
+var Stringify = require("../stringify")
+var stringify = Stringify([
+    require("../plugins/loose.js"),
+    require("../plugins/fragment.js"),
+    require("../plugins/raw.js")
+])
 
 var children = [
     "foo",
     { raw: "foo&copy;" },
     null,
-    undefined,
     ["span"],
     ["span", { raw: "foo&copy;"} ],
     ["span", "foo"],
@@ -24,10 +28,10 @@ var childrenString =
 var whiteChildrenString =
     "foo" +
     "foo©" +
-    "    <span></span>" +
-    "    <span>foo©</span>" +
-    "    <span>foo</span>" +
-    "    <span class=\"foo\"></span>"
+    "<span></span>" +
+    "<span>foo©</span>" +
+    "<span>foo</span>" +
+    "<span class=\"foo\"></span>"
 
 test("String is valid", function (assert) {
     var html = stringify("foobar")

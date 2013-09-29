@@ -1,6 +1,11 @@
 var test = require("tape")
 
-var stringify = require("../index")
+var Stringify = require("../stringify")
+var stringify = Stringify([
+    require("../plugins/loose.js"),
+    require("../plugins/fragment.js"),
+    require("../plugins/raw.js")
+])
 
 test("jsonml-stringify is a function", function (assert) {
     assert.equal(typeof stringify, "function")
@@ -69,9 +74,9 @@ test("encodes children", function (assert) {
         ["title", "Process dashboard"]
     ]])
 
-    assert.equal(html, "<head>\n" +
-        "    <meta charset=\"utf-8\"></meta>\n" +
-        "    <title>Process dashboard</title>\n" +
+    assert.equal(html, "<head>" +
+        "<meta charset=\"utf-8\"></meta>" +
+        "<title>Process dashboard</title>" +
         "</head>")
     assert.end()
 })
@@ -103,15 +108,15 @@ test("integration test", function (assert) {
     ]])
 
     assert.equal(html,
-        "<html>\n" +
-        "    <head>\n" +
-        "        <meta charset=\"utf-8\"></meta>\n" +
-        "        <title>Process dashboard</title>\n" +
-        "        <link rel=\"stylesheet\" href=\"/less/main\"></link>\n" +
-        "    </head>\n" +
-        "    <body class=\"main\">\n" +
-        "        <script src=\"/browserify/main\"></script>\n" +
-        "    </body>\n" +
+        "<html>" +
+        "<head>" +
+        "<meta charset=\"utf-8\"></meta>" +
+        "<title>Process dashboard</title>" +
+        "<link rel=\"stylesheet\" href=\"/less/main\"></link>" +
+        "</head>" +
+        "<body class=\"main\">" +
+        "<script src=\"/browserify/main\"></script>" +
+        "</body>" +
         "</html>")
     assert.end()
 })

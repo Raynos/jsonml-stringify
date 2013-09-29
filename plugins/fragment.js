@@ -7,7 +7,7 @@ var normalize = require("../normalize.js")
 module.exports = {
     stringify: function (tree, opts) {
         var strings = []
-
+        
         for (var i = 0; i < tree.fragment.length; i++) {
             strings.push(stringify(tree.fragment[i], opts))
         }

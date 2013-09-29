@@ -4,16 +4,16 @@ var document = require("global/document")
 var window = require("global/window")
 var console = require("console")
 
-var Dom = require("./jsonml/dom.js")
+var Dom = require("../dom.js")
 // var Merge = require("./jsonml/merge.js")
 var ObservableArray = require("./lib/observable-array.js")
 var template = require("./template.js")
 var listenMutation = require("./lib/listen-mutation.js")
 
 var dom = Dom([
-    require("./jsonml/plugins/loose.js"),
-    require("./jsonml/plugins/fragment.js"),
-    require("./jsonml/plugins/observ.js"),
+    require("../plugins/loose.js"),
+    require("../plugins/fragment.js"),
+    require("../plugins/observ.js"),
     require("./lib/plugin-either.js"),
     require("./lib/plugin-list.js"),
 ])

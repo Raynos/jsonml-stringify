@@ -1,76 +1,96 @@
-(*
-JsonML for our use case is very loosely defined. This
-    enables expressiveness in using it for templates.
+(* 
+JsonML is both loosely and strictly defined.
 
-Valid things are:
- - a text content string
- - a raw object containing a raw HTML string
- - a fragment object containing a list of children
- - a triplet containing just the selector
- - a triplet containing a selector and a raw object
- - a triplet containing a selector and a fragment object
- - a triplet containing a selector and hash of properties
- - a triplet containing a selector and a text content string
- - a triplet containing a selector and an array of children
- - a triplet containing a selector, properties hash
-    and an array of children
- - a triplet containing a selector, properties hash
-    and a text content string
- - a triplet containing a selector, properties hash
-    and a fragment object
- - a triplet containing a selector, properties hash
-    and a raw object
+A plugin is an object literal with either a single key / value
+    pair or a key 'type' and some properties
+
+Strict:
+    - null
+    - plugin
+    - [ tagName , properties , children ]
+    - [ '#text' , properties , text content ]
+    - [ '#text' , properties , plugin ]
+
+Loose:
+    - null
+    - undefined
+    - plugin
+    - text content
+    - [ tagName ]
+    - [ tagName , properties ]
+    - [ tagName , text content ]
+    - [ tagName , children ]
+    - [ tagName , plugin ]
+    - [ tagName , properties , text content ]
+    - [ tagName , properties , children ]
+    - [ tagname , properties , plugin ]
+    - [ '#text' , text content ]
+    - [ '#text' , properties , text content ]
+
 *)
 
-type JsonMLSelector := String
-type JsonMLTextContent := String
-type JsonMLRawContent := {
-    raw: String
-}
-type JsonMLFragment := {
-    fragment: Array<JsonML>
-}
-type JsonMLPropertyKey := String
-type JsonMlPropertyValue := String | Number | Boolean
-type JsonMLProps := Object<JsonMLPropertyKey, JsonMlPropertyValue>
 
-type MaybeJsonML :=
-    null |
-    undefined |
-    JsonMLTextContent |
-    JsonMLRawContent |
-    Observable |
-    { fragment: Array<MaybeJsonML> } |
-    [JsonMLSelector] |
-    [JsonMLSelector, Observable] |
-    [JsonMLSelector, JsonMLRawContent] |
-    [JsonMLSelector, { fragment: Array<MaybeJsonML> }] |
-    [JsonMLSelector, Object] |
-    [JsonMLSelector, JsonMLTextContent] |
-    [JsonMLSelector, Array<MaybeJsonML>] |
-    [JsonMLSelector, JsonMLProps, Observable] |
-    [JsonMLSelector, JsonMLProps, Array<MaybeJsonML>] |
-    [JsonMLSelector, JsonMLProps, JsonMLTextContent] |
-    [JsonMLSelector, JsonMLProps, { fragment: Array<MaybeJsonML> }] |
-    [JsonMLSelector, JsonMLProps, JsonMLRawContent]
+type JsonMLPlugin := Object | Function
+type JsonMLProperties := 
+    Object<String, String | Boolean | JsonMLPlugin>
 
 type JsonML :=
     null |
-    JsonMLTextContent |
-    JsonMLFragment |
-    JsonMLRawContent |
-    [
-        JsonMLSelector,
-        JsonMLProps,
-        Array<JsonML>
-    ]
+    JsonMLPlugin |
+    [ String , JsonMLProperties , Array<JsonML> ] |
+    [ "#text" , JsonMLProperties , String | JsonMLPlugin ]
 
-jsonml-stringify/dom := (jsonml: MaybeJsonML)
-    => DOMElement | DocumentFragment | DOMTextNode | null
 
-jsonml-stringify/normalize := (jsonml: MaybeJsonML) => JsonML
+type LooseJsonML := 
+    null |
+    undefined |
+    JsonMLPlugin |
+    String |
+    [ String ] |
+    [ String , JsonMLProperties ] |
+    [ String , String ] |
+    [ String , Array<LooseJsonML> ] |
+    [ String , JsonMLPlugin ] |
+    [ "#text" , String ] |
+    [ String , JsonMLProperties , String ] | 
+    [ String , JsonMLProperties , Array<LooseJsonML> ] |
+    [ String , JsonMLProperties , JsonMLPlugin ] |
+    [ "#text" , JsonMLProperties , String ]
 
-jsonml-stringify := (jsonml: MaybeJsonML, opts?: {
-    indentation: String,
-    parentTagName: String
+type JsonMLOptions := {
+    parent: JsonML,
+    parents: Array<JsonML>,
+    plugins: Array<Plugin>
+}
+
+type JsonMLMergeOptions := JsonMLOptions & {
+    elements: Array<DOMElement | DOMTextNode>,
+    root: DOMElement
+}
+
+type Plugin := {
+    stringify: (JsonML, JsonMLOptions) => String,
+    dom: (JsonML, JsonMLOptions) => DOMElement,
+    merge: (JsonML, JsonMLMergeOptions) => void,
+    type: String,
+    normalize: (JsonML, JsonMLOptions) => JsonML,
+    renderProperty: (DOMElement, value: Any, key: String, JsonMLOptions),
+    stringifyProperty: (value: Any, key: String, JsonMLOptions) => String,
+    mergeProperty: (DOMElement, value: Any, key: String, JsonMLMergeOptions),
+    setProperty: (value: Any, key: String),
+    getProperty: (value: Any, key: String) => String
+}
+
+stringify-recur := (JsonML, {
+    parent: JsonML,
+    parents: Array<JsonML>,
+    plugins: Array<Plugin>
 }) => String
+
+dom-recur := (JsonML, {
+    parent: JsonML,
+    parents: Array<JsonML>,
+    plugins: Array<Plugin>
+}) => DOMElement
+
+merge-recur := (JsonML, JsonMLMergeOptions)
