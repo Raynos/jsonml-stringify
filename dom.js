@@ -42,6 +42,10 @@ function dom(jsonml) {
         } else if (k === "style") {
             var style = properties.style
 
+            if (!elem.style) {
+                elem.style = {}
+            }
+
             Object.keys(style).forEach(function (key) {
                 elem.style[key] = style[key]
             })

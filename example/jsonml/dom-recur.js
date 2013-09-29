@@ -24,7 +24,7 @@ function domRecur(tree, opts) {
         return document.createTextNode(children)
     }
 
-    var tagName = unpackSelector(selector, properties)
+    var tagName = unpackSelector(selector, properties, opts)
 
     var elem = document.createElement(tagName.toUpperCase())
     Object.keys(properties).forEach(function (key) {

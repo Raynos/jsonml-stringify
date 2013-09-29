@@ -28,6 +28,10 @@ test("dom properly converts jsonml to element", function (assert) {
 })
 
 test("allow raw data", function (assert) {
+    if (!document.defaultView) {
+        return assert.end()
+    }
+
     var elem = dom(["span", [{
         raw: "&nbsp;&nbsp;&nbsp;|"
     }]])
