@@ -1,6 +1,6 @@
 {
   "name": "jsonml-stringify",
-  "version": "0.3.23",
+  "version": "1.0.0",
   "description": "Convert jsonml arrays to html strings",
   "keywords": [],
   "author": "Raynos <raynos2@gmail.com>",
