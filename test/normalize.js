@@ -76,7 +76,7 @@ test("[String, { raw: String }] is valid", function (assert) {
 test("[String, { fragment: Array<MaybeJsonML> }] is valid", function (assert) {
     var html = stringify(["span", { fragment: children }])
 
-    assert.equal(html, "<span>\n" + whiteChildrenString + "\n</span>")
+    assert.equal(html, "<span>" + whiteChildrenString + "</span>")
 
     assert.end()
 })
@@ -123,8 +123,8 @@ test("[String, Object, String] is valid", function (assert) {
 test("[String, Object, { fragment: Array<MaybeJsonML> }]", function (assert) {
     var html = stringify(["div", { class: "bar" }, { fragment: children }])
 
-    assert.equal(html, "<div class=\"bar\">\n" +
-        whiteChildrenString + "\n</div>")
+    assert.equal(html, "<div class=\"bar\">" +
+        whiteChildrenString + "</div>")
 
     assert.end()
 })
@@ -147,7 +147,8 @@ test("[[String, Object]] throws an exception", function (assert) {
 
 test("[String, String, Array] throws an exception", function (assert) {
     assert.throws(function () {
-        stringify(["div", "some text", ["some more text"]])
+        var res = stringify(["div", "some text", ["some more text"]])
+        console.log("response what", res)
     }, /Properties is not an object/)
 
     assert.end()
@@ -156,7 +157,7 @@ test("[String, String, Array] throws an exception", function (assert) {
 test("[] throws an exception", function (assert) {
     assert.throws(function () {
         stringify([])
-    }, /Empty array is not a valid element/)
+    }, /Empty array is not a valid elem/)
 
     assert.end()
 })

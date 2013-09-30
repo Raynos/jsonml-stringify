@@ -35,7 +35,9 @@ function normalizeTree(tree, opts) {
     var properties = tree[1] || {}
     var children = tree[2] || []
 
-    if (isChildren(properties, opts)) {
+
+
+    if (!tree[2] && isChildren(properties, opts)) {
         children = properties
         properties = {}
     }
