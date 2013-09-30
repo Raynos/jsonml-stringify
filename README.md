@@ -1,4 +1,4 @@
-# jsonml-stringify
+# jsonml-stringify <Outdated 0.3 README>
 
 [![build status][1]][2] [![dependency status][3]][4] [![coverage report][9]][10] [![stability index][15]][16]
 
