@@ -81,16 +81,8 @@ type Plugin := {
     getProperty: (value: Any, key: String) => String
 }
 
-stringify-recur := (JsonML, {
-    parent: JsonML,
-    parents: Array<JsonML>,
-    plugins: Array<Plugin>
-}) => String
+stringify-recur := (JsonML, JsonMLOptions) => String
 
-dom-recur := (JsonML, {
-    parent: JsonML,
-    parents: Array<JsonML>,
-    plugins: Array<Plugin>
-}) => DOMElement
+dom-recur := (JsonML, JsonMLOptions) => DOMElement
 
 merge-recur := (JsonML, JsonMLMergeOptions)

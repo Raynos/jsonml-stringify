@@ -1,4 +1,4 @@
-# jsonml-stringify <Outdated 0.3 README>
+# jsonml-stringify
 
 [![build status][1]][2] [![dependency status][3]][4] [![coverage report][9]][10] [![stability index][15]][16]
 
@@ -11,7 +11,10 @@ Convert jsonml arrays to html strings
 ## Example
 
 ```js
-var stringify = require("jsonml-stringify")
+var Stringify = require("jsonml-stringify/stringify")
+var stringify = Stringify([
+    require("jsonml-stringify/plugins/loose")
+])
 var assert = require("assert")
 
 var html = stringify(["html", [
@@ -43,7 +46,11 @@ assert.equal(html,
 ## stringify raw html entities
 
 ```js
-var stringify = require("jsonml-stringify")
+var Stringify = require("jsonml-stringify/stringify")
+var stringify = Stringify([
+    require("jsonml-stringify/plugins/loose"),
+    require("jsonml-stringify/plugins/raw")
+])
 var assert = require("assert")
 
 var html = stringify(["div", { raw: "foo&copy;" }])
@@ -54,7 +61,11 @@ assert.equal(html, "<div>\n    foo©\n</div>")
 ## stringify fragments
 
 ```js
-var stringify = require("jsonml-stringify")
+var Stringify = require("jsonml-stringify/stringify")
+var stringify = Stringify([
+    require("jsonml-stringify/plugins/loose"),
+    require("jsonml-stringify/plugins/fragment")
+])
 var assert = require("assert")
 
 var html = stringify(["div", [
@@ -80,80 +91,108 @@ assert.equal(html, "<div>\n" +
 
 ## Loose JSONML definition
 
-JsonML for our use case is very loosely defined. This
-    enables expressiveness in using it for templates.
+```ocaml
+(* 
+JsonML is both loosely and strictly defined.
 
-Valid things are:
- - a text content string
- - a raw object containing a raw HTML string
- - a fragment object containing a list of children
- - a triplet containing just the selector
- - a triplet containing a selector and a raw object
- - a triplet containing a selector and a fragment object
- - a triplet containing a selector and hash of attributes
- - a triplet containing a selector and a text content string
- - a triplet containing a selector and an array of children
- - a triplet containing a selector, attributes hash
-    and an array of children
- - a triplet containing a selector, attributes hash
-    and a text content string
- - a triplet containing a selector, attributes hash
-    and a fragment object
- - a triplet containing a selector, attributes hash
-    and a raw object
+A plugin is an object literal with either a single key / value
+    pair or a key 'type' and some properties
+
+Loose:
+    - null
+    - undefined
+    - plugin
+    - text content
+    - [ tagName ]
+    - [ tagName , properties ]
+    - [ tagName , text content ]
+    - [ tagName , children ]
+    - [ tagName , plugin ]
+    - [ tagName , properties , text content ]
+    - [ tagName , properties , children ]
+    - [ tagname , properties , plugin ]
+    - [ '#text' , text content ]
+    - [ '#text' , properties , text content ]
+
+*)
+
+type JsonMLPlugin := Object | Function
+type JsonMLProperties := 
+    Object<String, String | Boolean | JsonMLPlugin>
+
+type LooseJsonML := 
+    null |
+    undefined |
+    JsonMLPlugin |
+    String |
+    [ String ] |
+    [ String , JsonMLProperties ] |
+    [ String , String ] |
+    [ String , Array<LooseJsonML> ] |
+    [ String , JsonMLPlugin ] |
+    [ "#text" , String ] |
+    [ String , JsonMLProperties , String ] | 
+    [ String , JsonMLProperties , Array<LooseJsonML> ] |
+    [ String , JsonMLProperties , JsonMLPlugin ] |
+    [ "#text" , JsonMLProperties , String ]
+```
+
+### Plugin definition
 
 ```ocaml
-type JsonMLSelector := String
-type JsonMLTextContent := String
-type JsonMLRawContent := {
-    raw: String
+type Plugin := {
+    stringify: (JsonML, JsonMLOptions) => String,
+    dom: (JsonML, JsonMLOptions) => DOMElement,
+    merge: (JsonML, JsonMLMergeOptions) => void,
+    type: String,
+    normalize: (JsonML, JsonMLOptions) => JsonML,
+    renderProperty: (DOMElement, value: Any, key: String, JsonMLOptions),
+    stringifyProperty: (value: Any, key: String, JsonMLOptions) => String,
+    mergeProperty: (DOMElement, value: Any, key: String, JsonMLMergeOptions),
+    setProperty: (value: Any, key: String),
+    getProperty: (value: Any, key: String) => String
 }
-type JsonMLFragment := {
-    fragment: Array<JsonML>
-}
-type JsonMLAttributeKey := String
-type JsonMLAttributeValue := String | Number | Boolean
-type JsonMLAttrs := Object<JsonMLAttributeKey, JsonMLAttributeValue>
-
-type MaybeJsonML :=
-    JsonMLTextContent |
-    JsonMLRawContent |
-    { fragment: Array<MaybeJsonML> } |
-    [JsonMLSelector] |
-    [JsonMLSelector, JsonMLRawContent] |
-    [JsonMLSelector, { fragment: Array<MaybeJsonML> }] |
-    [JsonMLSelector, Object] |
-    [JsonMLSelector, JsonMLTextContent] |
-    [JsonMLSelector, Array<MaybeJsonML>] |
-    [JsonMLSelector, JsonMLAttrs, Array<MaybeJsonML>] |
-    [JsonMLSelector, JsonMLAttrs, JsonMLTextContent] |
-    [JsonMLSelector, JsonMLAttrs, { fragment: Array<MaybeJsonML> }] |
-    [JsonMLSelector, JsonMLAttrs, JsonMLRawContent]
 ```
 
 ### Strict definition & functions
 
 ```ocaml
+(*
+
+Strict:
+    - null
+    - plugin
+    - [ tagName , properties , children ]
+    - [ '#text' , properties , text content ]
+    - [ '#text' , properties , plugin ]
+
+*)
+type JsonMLPlugin := Object | Function
+type JsonMLProperties := 
+    Object<String, String | Boolean | JsonMLPlugin>
+
 type JsonML :=
-    JsonMLTextContent |
-    JsonMLFragment |
-    JsonMLRawContent |
-    [
-        JsonMLSelector,
-        JsonMLAttrs,
-        Array<JsonML>
-    ]
+    null |
+    JsonMLPlugin |
+    [ String , JsonMLProperties , Array<JsonML> ] |
+    [ "#text" , JsonMLProperties , String | JsonMLPlugin ]
 
-jsonml-stringify := (jsonml: JsonML, opts: Object?) => String
+type JsonMLOptions := {
+    parent: JsonML,
+    parents: Array<JsonML>,
+    plugins: Array<Plugin>
+}
 
-jsonml-stringify/normalize := (MaybeJsonML) => JsonML
+type JsonMLMergeOptions := JsonMLOptions & {
+    elements: Array<DOMElement | DOMTextNode>,
+    root: DOMElement
+}
 
-jsonml-stringify/dom := (jsonml: JsonML) => DOMElement
+stringify-recur := (JsonML, JsonMLOptions) => String
 
-jsonml-stringify/attrs := (attributes: Object) => String
+dom-recur := (JsonML, JsonMLOptions) => DOMElement
 
-jsonml-stringify/unpack-selector :=
-    (selector: String, attributes!: Object) => tagName: String
+merge-recur := (JsonML, JsonMLMergeOptions)
 ```
 
 ## Installation
