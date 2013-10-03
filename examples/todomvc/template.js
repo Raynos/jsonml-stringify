@@ -1,4 +1,4 @@
-// var either = require("jsonml-either")
+var either = require("jsonml-either")
 var list = require("jsonml-list")
 var event = require("jsonml-event")
 var focus = require("jsonml-focus")
@@ -7,25 +7,36 @@ var computed = require("observ/computed")
 
 module.exports = template
 
-function mainSection(viewModel) {
-    return ["section.main", {
-        hidden: viewModel.todosLength
-    }, [
-        ["input#toggle-all.toggle-all", {
-            type: "checkbox",
-            checked: viewModel.allComplete,
-            change: event(viewModel.events)
-        }],
-        ["label", { htmlFor: "toggle-all" }, "Mark all as complete"],
-        ["ul.todo-list", list(viewModel.visibleTodos, todoItem)]
+function template(model) {
+    return ["div.todomvc-wrapper", [
+        ["section.todoapp", [
+            header(model),
+            mainSection(model),
+            statsSection(model)
+        ]],
+        infoFooter()
     ]]
 }
 
-function todoItem(todoItem) {
+function mainSection(model) {
+    return ["section.main", {
+        hidden: either(model.todosLength, false, true)
+    }, [
+        ["input#toggle-all.toggle-all", {
+            type: "checkbox",
+            checked: model.allComplete,
+            change: event(model.events.toggleAll)
+        }],
+        ["label", { htmlFor: "toggle-all" }, "Mark all as complete"],
+        ["ul.todo-list", list(model.visibleTodos, todoItem)]
+    ]]
+}
+
+function todoItem(todo) {
     var className = computed([
-        todoItem.completed, todoItem.editing
+        todo.completed, todo.editing
     ], function (completed, editing) {
-        return (completed ? "completed " : "") + 
+        return (completed ? "completed " : "") +
             (editing ? "editing" : "")
     })
 
@@ -34,19 +45,19 @@ function todoItem(todoItem) {
         // when events occur from jsonml-event
         // you can access the nearest bound model with
         // `ev.model`
-        boundModel: boundModel(todoItem)
+        boundModel: boundModel(todo)
     }, [
         ["div.view", [
             ["input.toggle", {
                 type: "checkbox",
-                checked: todoItem.completed,
-                change: event(todoItem.events.toggle)
+                checked: todo.completed,
+                change: event(todo.events.toggle)
             }],
             ["label", {
-                dblclick: event(todoItem.events.editing)
-            }, todoItem.title],
+                dblclick: event(todo.events.editing)
+            }, todo.title],
             ["button.destroy", {
-                click: event(todoItem.events.destroy)
+                click: event(todo.events.destroy)
             }]
         ]],
         ["input.edit", {
@@ -59,3 +70,60 @@ function todoItem(todoItem) {
         }]
     ]]
 }
+
+function statsSection(model) {
+    return ["footer.footer", {
+        hidden: either(model.todosLength, false, true)
+    }, [
+        ["span.todo-count", [
+            ["strong", model.todosLeft],
+            computed([model.todosLength], function (len) {
+                return len === 1 ? " item" : " items"
+            }),
+            " left"
+        ]],
+        ["ul.filters", [
+            link(model, "#/", "All", "all"),
+            link(model, "#/active", "Active", "active"),
+            link(model, "#/completed", "Completed", "completed")
+        ]]
+    ]]
+}
+
+function link(model, uri, text, expected) {
+    return ["li", [
+        ["a", {
+            className: computed([model.route], function (route) {
+                return route === expected ? "selected" : ""
+            }),
+            href: uri
+        }, text]
+    ]]
+}
+
+function header(model) {
+    return ["header.header", [
+        ["h1", "todos"],
+        ["input.new-todo", {
+            placeholder: "What needs to be done?",
+            autofocus: true,
+            value: model.todoField,
+            submit: event(model.events.add)
+        }]
+    ]]
+}
+
+function infoFooter() {
+    return ["footer.info", [
+        ["p", "Double-click to edit a todo"],
+        ["p", [
+            "Written by ",
+            ["a", { href: "https://github.com/Raynos" }, "Raynos"]
+        ]],
+        ["p", [
+            "Part of ",
+            ["a", { href: "http://todomvc.com" }, "TodoMVC"]
+        ]]
+    ]]
+}
+

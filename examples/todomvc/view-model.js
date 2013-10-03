@@ -4,12 +4,18 @@ var ObservableArray = require("observ-array")
 var uuid = require("uuid")
 
 var toggleAll = uuid()
+var toggle = uuid()
+var editing = uuid()
+var destroy = uuid()
+var edit = uuid()
+var add = uuid()
 
 module.exports = ViewModel
 
 function ViewModel(initialState) {
     var todos = ObservableArray(initialState)
     var route = Observable("all")
+    var todoField = Observable("")
 
     var openTodos = todos.computedFilter(function (item) {
         return item.completed === false
@@ -23,6 +29,8 @@ function ViewModel(initialState) {
 
     var viewModel = {
         todos: todos,
+        todoField: todoField,
+        route: route,
         todosLength: todosLength,
         allComplete: computed([todos], function (todos) {
             return todos.every(function (todo) {
@@ -40,17 +48,21 @@ function ViewModel(initialState) {
         // listens to '.computed' property on list item
         // doesn't refilter entire array each time anything changes!
         // sends minimal diffs to DOM renderer :)
-        visibleTodos: todos.computedFilter([route, ".computed"], 
-            function (route, item) {
+        visibleTodos: todos.computedFilter([route, ".completed"],
+            function (route, todo) {
                 return route === "completed" && todo.completed ||
                     route === "active" && !todo.completed ||
                     route === "all"
             }),
         events: {
-            toggleAll: toggleAll 
-        },
-        route: route
-    }    
+            toggleAll: toggleAll,
+            toggle: toggle,
+            editing: editing,
+            destroy: destroy,
+            edit: edit,
+            add: add
+        }
+    }
 
     return viewModel
 }

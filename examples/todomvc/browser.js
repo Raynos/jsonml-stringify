@@ -1,18 +1,38 @@
 var localStorage = require("global/window").localStorage
+var document = require("global/document")
+var Delegator = require("dom-delegator")
+var HashRouter = require("hash-router")
+var Dom = require("jsonml-stringify/dom")
 
-var ViewModel = require("./view-model.js")
 var template = require("./template.js")
+var App = require("./app.js")
+
+// configure Dom rendered
+var dom = Dom([
+    require("jsonml-stringify/plugins/loose"),
+    require("jsonml-stringify/plugins/fragment"),
+    require("jsonml-stringify/plugins/observ")
+])
 
 // Read from db
 var storedState = localStorage.getItem("todomvc-jsonml")
 var initialState = storedState ? JSON.parse(storedState) : []
 
-// Model
-var viewModel = ViewModel(initialState)
+// Inputs
+var delegator = Delegator()
+var router = HashRouter()
+
+// Get app to generate view model from inputs
+var viewModel = App(initialState, {
+    delegator: delegator,
+    router: router
+})
+
 // Renderer
 var tree = template(viewModel)
-// Inputs
-
+// Render the tree
+var elem = dom(tree)
+document.body.appendChild(elem)
 
 // Store to db
 viewModel.todos(function (tuple) {
