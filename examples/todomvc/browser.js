@@ -36,5 +36,8 @@ document.body.appendChild(elem)
 
 // Store to db
 viewModel.todos(function (tuple) {
-    localStorage.setItem("todomvc-jsonml", JSON.stringify(tuple.array))
+    localStorage.setItem("todomvc-jsonml",
+        JSON.stringify(tuple.array.map(function (todo) {
+            return todo.toJSON()
+        })))
 })

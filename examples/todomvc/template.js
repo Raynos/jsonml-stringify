@@ -28,11 +28,13 @@ function mainSection(model) {
             change: event(model.events.toggleAll)
         }],
         ["label", { htmlFor: "toggle-all" }, "Mark all as complete"],
-        ["ul.todo-list", list(model.visibleTodos, todoItem)]
+        ["ul.todo-list", list(model.visibleTodos, function (item) {
+            return todoItem(item, model)
+        })]
     ]]
 }
 
-function todoItem(todo) {
+function todoItem(todo, model) {
     var className = computed([
         todo.completed, todo.editing
     ], function (completed, editing) {
@@ -51,13 +53,13 @@ function todoItem(todo) {
             ["input.toggle", {
                 type: "checkbox",
                 checked: todo.completed,
-                change: event(todo.events.toggle)
+                change: event(model.events.toggle)
             }],
             ["label", {
-                dblclick: event(todo.events.editing)
+                dblclick: event(model.events.editing)
             }, todo.title],
             ["button.destroy", {
-                click: event(todo.events.destroy)
+                click: event(model.events.destroy)
             }]
         ]],
         ["input.edit", {
@@ -65,8 +67,8 @@ function todoItem(todo) {
             // focus plugin, when observable is triggered
             // it calls .focus() on this element
             focus: focus(todo.editing),
-            submit: event(todoItem.events.edit),
-            blur: event(todoItem.events.edit)
+            submit: event(model.events.edit),
+            blur: event(model.events.edit)
         }]
     ]]
 }
@@ -126,4 +128,3 @@ function infoFooter() {
         ]]
     ]]
 }
-
