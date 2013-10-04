@@ -48,24 +48,17 @@ function ViewModel(initialState) {
             function (len, left) {
                 return len - left
             }),
-        visibleTodos: computed([route, todos], function (route, todos) {
-            return todos.filter(function (todo) {
-                return route === "completed" && todo.completed() ||
-                    route === "active" && !todo.completed() ||
-                    route === "all"
-            })
-        }),
         // refilters entire array when route changes
         // only refilters single item in list when list operation
         // listens to '.computed' property on list item
         // doesn't refilter entire array each time anything changes!
         // sends minimal diffs to DOM renderer :)
-        // visibleTodos: todos.computedFilter([route, ".completed"],
-        //     function (route, todo) {
-        //         return route === "completed" && todo.completed ||
-        //             route === "active" && !todo.completed ||
-        //             route === "all"
-        //     }),
+        visibleTodos: todos.computedFilter([route, ".completed"],
+            function (route, todo) {
+                return route === "completed" && todo.completed() ||
+                    route === "active" && !todo.completed() ||
+                    route === "all"
+            }),
         events: {
             toggleAll: toggleAll,
             toggle: toggle,
