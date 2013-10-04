@@ -3,6 +3,7 @@ var document = require("global/document")
 var Delegator = require("dom-delegator")
 var HashRouter = require("hash-router")
 var Dom = require("jsonml-stringify/dom")
+var serialize = require("observ-array/serialize")
 
 var template = require("./template.js")
 var App = require("./app.js")
@@ -37,5 +38,5 @@ document.body.appendChild(elem)
 // Store to db
 viewModel.todos(function (todos) {
     localStorage.setItem("todomvc-jsonml",
-        JSON.stringify(todos.toJSON()))
+        JSON.stringify(serialize(todos)))
 })

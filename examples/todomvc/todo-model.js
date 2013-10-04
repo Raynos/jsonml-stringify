@@ -10,15 +10,6 @@ function TodoModel(todo) {
         title: Observable(String(todo.title)),
         id: uuid(),
         completed: Observable(Boolean(todo.completed)),
-        editing: Observable(false),
-        toJSON: toJSON
-    }
-}
-
-function toJSON() {
-    return {
-        title: this.title(),
-        completed: this.completed(),
-        id: this.id
+        editing: Observable(false)
     }
 }
