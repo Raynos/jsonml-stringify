@@ -2,14 +2,14 @@ var http = require("http")
 var ServeBrowserify = require("serve-browserify")
 var JSONGlobals = require("json-globals")
 
-var Stringify = require("../stringify.js")
+var Stringify = require("../../stringify.js")
 var template = require("./template")
 
 var stringify = Stringify([
-    require("../plugins/loose.js"),
-    require("../plugins/fragment.js"),
-    require("./lib/plugin-either.js"),
-    require("./lib/plugin-list.js")
+    require("../../plugins/loose.js"),
+    require("../../plugins/fragment.js"),
+    require("../lib/plugin-either.js"),
+    require("../lib/plugin-list.js")
 ])
 
 http.createServer(function (req, res) {

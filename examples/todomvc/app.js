@@ -38,20 +38,20 @@ function TodoItem(model, delegator) {
     var events = model.events
 
     delegator.on(events.toggle, function (ev) {
-        ev.model.completed.set(!ev.model.completed())
+        ev.meta.completed.set(!ev.meta.completed())
     })
 
     delegator.on(events.editing, function (ev) {
-        ev.model.editing.set(true)
+        ev.meta.editing.set(true)
     })
 
     delegator.on(events.destroy, function (ev) {
-        var index = model.todos.indexOf(ev.model)
+        var index = model.todos.indexOf(ev.meta)
         model.todos.splice(index, 1)
     })
 
     delegator.on(events.edit, function (ev) {
-        ev.model.title.set(ev.currentValue)
-        ev.model.editing.set(false)
+        ev.meta.title.set(ev.currentValue)
+        ev.meta.editing.set(false)
     })
 }

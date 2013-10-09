@@ -1,4 +1,6 @@
-var template = function (model) {
+module.exports = template
+
+function template(model) {
     return ["div", [
         either(model.x, ["div", [
             ["li", [
@@ -21,8 +23,6 @@ var template = function (model) {
         ]]
     ]]
 }
-
-module.exports = template
 
 function either(bool, left, right) {
     return {

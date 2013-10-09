@@ -1,7 +1,8 @@
 var Observable = require("observ")
 var computed = require("observ/computed")
-var ObservableArray = require("observ-array")
 var uuid = require("uuid")
+var ObservableArray = require("../lib/observ-array.js")
+var computedFilter = require("../lib/computed-filter.js")
 
 var TodoModel = require("./todo-model.js")
 
@@ -19,9 +20,10 @@ function ViewModel(initialState) {
     var route = Observable("all")
     var todoField = Observable("")
 
-    var openTodos = todos.computedFilter(function (item) {
-        return item.completed === false
-    })
+    var openTodos = computedFilter(todos, [".completed"], 
+        function (item) {
+            return item.completed === false
+        })
     var todosLength = computed([todos], function (todos) {
         return todos.array.length
     })
@@ -53,7 +55,7 @@ function ViewModel(initialState) {
         // listens to '.computed' property on list item
         // doesn't refilter entire array each time anything changes!
         // sends minimal diffs to DOM renderer :)
-        visibleTodos: todos.computedFilter([route, ".completed"],
+        visibleTodos: computedFilter(todos, [route, ".completed"],
             function (route, todo) {
                 return route === "completed" && todo.completed() ||
                     route === "active" && !todo.completed() ||

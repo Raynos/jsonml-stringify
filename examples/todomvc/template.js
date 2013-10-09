@@ -1,9 +1,9 @@
-var either = require("jsonml-either")
-var list = require("jsonml-list")
-var event = require("jsonml-event")
-var focus = require("jsonml-focus")
-var boundModel = require("jsonml-event/model")
 var computed = require("observ/computed")
+var either = require("./lib-template/either.js")
+var list = require("./lib-template/list.js")
+var event = require("./lib-template/event.js")
+var focus = require("./lib-template/focus.js")
+var eventMeta = require("./lib-template/event-meta.js")
 
 module.exports = template
 
@@ -46,8 +46,8 @@ function todoItem(todo, model) {
         className: className,
         // when events occur from jsonml-event
         // you can access the nearest bound model with
-        // `ev.model`
-        boundModel: boundModel(todo)
+        // `ev.meta`
+        meta: eventMeta(todo)
     }, [
         ["div.view", [
             ["input.toggle", {
@@ -64,7 +64,7 @@ function todoItem(todo, model) {
         ]],
         ["input.edit", {
             value: todo.title,
-            // focus plugin, when observable is triggered
+            // focus primitive, when observable is triggered
             // it calls .focus() on this element
             focus: focus(todo.editing),
             submit: event(model.events.edit),

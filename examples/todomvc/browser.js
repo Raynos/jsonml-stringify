@@ -1,18 +1,25 @@
 var localStorage = require("global/window").localStorage
 var document = require("global/document")
-var Delegator = require("dom-delegator")
 var HashRouter = require("hash-router")
-var Dom = require("jsonml-stringify/dom")
-var serialize = require("observ-array/serialize")
+var Dom = require("../../dom")
+var Delegator = require("../lib/dom-delegator.js")
+var serialize = require("../lib/observ-array-serialize.js")
+// var Delegator = require("dom-delegator")
+// var serialize = require("observ-array/serialize")
 
 var template = require("./template.js")
 var App = require("./app.js")
 
 // configure Dom rendered
 var dom = Dom([
-    require("jsonml-stringify/plugins/loose"),
-    require("jsonml-stringify/plugins/fragment"),
-    require("jsonml-stringify/plugins/observ")
+    require("../../plugins/loose"),
+    require("../../plugins/fragment"),
+    require("../../plugins/observ"),
+    require("../lib/plugin-either.js"),
+    require("../lib/plugin-list.js"),
+    require("../lib/plugin-event.js"),
+    require("../lib/plugin-focus.js"),
+    require("../lib/plugin-event-meta.js")
 ])
 
 // Read from db
