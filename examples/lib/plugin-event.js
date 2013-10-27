@@ -13,7 +13,8 @@ function getEvents(elem) {
 
 function renderProperty(elem, value, key) {
     var name = value.name
+    var eventName = value.eventName || key
     var state = getEvents(elem)
-    state[name] = key
+    state[eventName] = { name: name }
     map.set(elem, state)
 }

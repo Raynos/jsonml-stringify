@@ -1,5 +1,9 @@
 module.exports = event
 
-function event(name) {
-    return { type: "event", name: name }
+function event(name, eventName) {
+    return { 
+        type: "event", 
+        name: name,
+        eventName: eventName
+    }
 }

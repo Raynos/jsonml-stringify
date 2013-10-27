@@ -2,6 +2,8 @@ var computed = require("observ/computed")
 var either = require("./lib-template/either.js")
 var list = require("./lib-template/list.js")
 var event = require("./lib-template/event.js")
+var changeEvent = require("./lib-template/change-event.js")
+var submitEvent = require("./lib-template/submit-event.js")
 var focus = require("./lib-template/focus.js")
 var eventMeta = require("./lib-template/event-meta.js")
 
