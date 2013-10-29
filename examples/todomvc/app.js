@@ -9,14 +9,14 @@ function App(initialState, inputs) {
 
     // Model
     var model = ViewModel(initialState)
-    var events = model.events
+    var eventNames = model.events
 
     // store route in model
     router.on("route", function (ev) {
         model.route.set(ev.hash)
     })
 
-    events.on(events.toggleAll, function (ev) {
+    events.on(eventNames.toggleAll, function (ev) {
         model.todos().array.forEach(function (todo) {
             todo.completed.set(!todo.completed())
         })
@@ -24,7 +24,7 @@ function App(initialState, inputs) {
 
     TodoItem(model, events)
 
-    events.on(events.add, function (ev) {
+    events.on(eventNames.add, function (ev) {
         model.todos.push(TodoModel({
             title: ev.currentValue
         }))
@@ -35,22 +35,22 @@ function App(initialState, inputs) {
 }
 
 function TodoItem(model, events) {
-    var events = model.events
+    var eventNames = model.events
 
-    events.on(events.toggle, function (ev) {
+    events.on(eventNames.toggle, function (ev) {
         ev.meta.completed.set(!ev.meta.completed())
     })
 
-    events.on(events.editing, function (ev) {
+    events.on(eventNames.editing, function (ev) {
         ev.meta.editing.set(true)
     })
 
-    events.on(events.destroy, function (ev) {
+    events.on(eventNames.destroy, function (ev) {
         var index = model.todos.indexOf(ev.meta)
         model.todos.splice(index, 1)
     })
 
-    events.on(events.edit, function (ev) {
+    events.on(eventNames.edit, function (ev) {
         ev.meta.title.set(ev.currentValue)
         ev.meta.editing.set(false)
     })
