@@ -5,7 +5,7 @@ module.exports = App
 
 function App(initialState, inputs) {
     var router = inputs.router
-    var delegator = inputs.delegator
+    var events = inputs.events
 
     // Model
     var model = ViewModel(initialState)
@@ -16,15 +16,15 @@ function App(initialState, inputs) {
         model.route.set(ev.hash)
     })
 
-    delegator.on(events.toggleAll, function (ev) {
+    events.on(events.toggleAll, function (ev) {
         model.todos().array.forEach(function (todo) {
             todo.completed.set(!todo.completed())
         })
     })
 
-    TodoItem(model, delegator)
+    TodoItem(model, events)
 
-    delegator.on(events.add, function (ev) {
+    events.on(events.add, function (ev) {
         model.todos.push(TodoModel({
             title: ev.currentValue
         }))
@@ -34,23 +34,23 @@ function App(initialState, inputs) {
     return model
 }
 
-function TodoItem(model, delegator) {
+function TodoItem(model, events) {
     var events = model.events
 
-    delegator.on(events.toggle, function (ev) {
+    events.on(events.toggle, function (ev) {
         ev.meta.completed.set(!ev.meta.completed())
     })
 
-    delegator.on(events.editing, function (ev) {
+    events.on(events.editing, function (ev) {
         ev.meta.editing.set(true)
     })
 
-    delegator.on(events.destroy, function (ev) {
+    events.on(events.destroy, function (ev) {
         var index = model.todos.indexOf(ev.meta)
         model.todos.splice(index, 1)
     })
 
-    delegator.on(events.edit, function (ev) {
+    events.on(events.edit, function (ev) {
         ev.meta.title.set(ev.currentValue)
         ev.meta.editing.set(false)
     })

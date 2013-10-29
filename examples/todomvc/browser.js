@@ -32,7 +32,7 @@ var router = HashRouter()
 
 // Get app to generate view model from inputs
 var viewModel = App(initialState, {
-    delegator: delegator,
+    events: delegator,
     router: router
 })
 
