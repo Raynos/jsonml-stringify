@@ -1,4 +1,4 @@
-var decode = require("ent").decode
+var decode = require("he").decode
 var element = require("element")
 
 module.exports = {

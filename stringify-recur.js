@@ -1,5 +1,5 @@
 var util = require("util")
-var encode = require("ent").encode
+var encode = require("he").encode
 var extend = require("xtend")
 
 var unpackSelector = require("./lib/unpack-selector.js")

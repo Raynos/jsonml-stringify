@@ -1,4 +1,4 @@
-var decode = require("ent").decode
+var decode = require("he").decode
 var util = require("util")
 
 var normalize = require("../normalize")
